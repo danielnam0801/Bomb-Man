@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static Core.Define;
 
 public class AgentInput : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class AgentInput : MonoBehaviour
 
     public event Action<Vector3> OnMovementKeyPress = null;
     public event Action OnAttackKeyPress = null; //공격키 이벤트
-    public event Action OnRollingKeyPress = null; //회피키 이벤트
+    public event Action OnJumpKeyPress = null; //회피키 이벤트
 
     private Vector3 _directionInput;
 
@@ -16,14 +17,14 @@ public class AgentInput : MonoBehaviour
     {
         UpdateMoveInput();
         UpdateAttackInput();
-        UpdateRollingInput();
+        UpdateJumpInput();
     }
 
-    private void UpdateRollingInput()
+    private void UpdateJumpInput()
     {
         if (Input.GetButtonDown("Jump"))
         {
-            OnRollingKeyPress?.Invoke();
+            OnJumpKeyPress?.Invoke();
         }
     }
 
@@ -48,20 +49,21 @@ public class AgentInput : MonoBehaviour
         return Quaternion.Euler(0, -45f, 0) * _directionInput.normalized;
     }
 
-    //public Vector3 GetMouseWorldPosition()
-    //{
-    //    Ray ray = MainCam.ScreenPointToRay(Input.mousePosition);
+    public Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = MainCam.ScreenPointToRay(Input.mousePosition);
 
-    //    RaycastHit hit;
+        RaycastHit hit;
 
-    //    bool result = Physics.Raycast(ray, out hit, MainCam.farClipPlane, _whatIsGround);
-    //    if (result)
-    //    {
-    //        return hit.point;
-    //    }
-    //    else
-    //    {
-    //        return Vector3.zero;
-    //    }
-    //}
+        bool result = Physics.Raycast(ray, out hit, MainCam.farClipPlane,
+        _whatIsGround);
+        if (result)
+        {
+            return hit.point;
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+    }
 }
