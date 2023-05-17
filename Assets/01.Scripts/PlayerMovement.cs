@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        
+        characterController = GetComponent<CharacterController>();
     }
+
 }
