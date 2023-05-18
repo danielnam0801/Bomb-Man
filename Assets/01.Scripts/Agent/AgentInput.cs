@@ -12,6 +12,7 @@ public class AgentInput : MonoBehaviour
     public event Action OnJumpKeyPress = null; //회피키 이벤트
 
     private Vector3 _directionInput;
+    public Vector3 DirectionInput => _directionInput;
 
     void Update()
     {

@@ -29,6 +29,11 @@ public class AgentMovement : MonoBehaviour
         _movementVelocity = value;
     }
 
+    public void SetDoJump(float jumpPower, Vector3 dir)
+    {
+
+    }
+
     private void CalculatePlayerMovement()
     {
         _inputVelocity.Normalize();
@@ -42,5 +47,39 @@ public class AgentMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(_movementVelocity);
         }
+    }
+
+    public void SetRotation(Vector3 target)
+    {
+        Vector3 dir = target - transform.position;
+        dir.y = 0;
+        transform.rotation = Quaternion.LookRotation(dir);
+    }
+
+    public void StopImmediately()
+    {
+        _movementVelocity = Vector3.zero;
+        _agentAnimator?.SetSpeed(0); //이동속도 반영
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsActiveMove)
+        {
+            CalculatePlayerMovement();
+        }
+
+        if (_characterController.isGrounded == false)
+        {
+            _verticalVelocity = _gravity * Time.fixedDeltaTime;
+        }
+        else
+        {
+            _verticalVelocity = _gravity * 0.3f * Time.fixedDeltaTime;
+        }
+
+        Vector3 move = _movementVelocity + _verticalVelocity * Vector3.up;
+        _characterController.Move(move);
+        _agentAnimator?.SetAirbone(!_characterController.isGrounded);
     }
 }

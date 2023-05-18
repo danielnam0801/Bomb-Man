@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IState
 {
     public void OnEnterState();
-    public void OnUpdateState();
+    public bool OnUpdateState();
     public void OnExitState();
     public void SetUp(Transform root);
 }

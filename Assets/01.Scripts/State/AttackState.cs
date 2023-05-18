@@ -2,25 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : IState
+public class AttackState : CommonState
 {
-    public void OnEnterState()
+    public override void OnEnterState()
+    {
+        
+    }   
+
+    public override void OnExitState()
     {
         
     }
 
-    public void OnUpdateState()
+    public override bool OnUpdateState()
     {
-    
-    }
-
-    public void OnExitState()
-    {
-    
-    }
-
-    public void SetUp(Transform root)
-    {
-        
+        return false;   
     }
 }
