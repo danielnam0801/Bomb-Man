@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,12 @@ public class JumpState : CommonState
         _agentMovement.SetRotation(dir + _agentController.transform.position);
 
         _agentMovement.StopImmediately();
-        _agentMovement.SetMovementVelocity();
+        _agentMovement.SetDoJump(_jumpPower, dir);
+        
+    }
+
+    private void JumpEndHandle()
+    {
         
     }
 

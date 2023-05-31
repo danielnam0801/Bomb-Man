@@ -5,7 +5,7 @@ using UnityEngine;
 public class AgentMovement : MonoBehaviour
 {
     [SerializeField] float _gravity = -9.8f;
-    private CharacterController _characterController;
+    [SerializeField] Transform _GroundDetectPoint;
     private AgentAnimator _agentAnimator;
 
     private Vector3 _movementVelocity;
@@ -14,13 +14,15 @@ public class AgentMovement : MonoBehaviour
     private Vector3 _inputVelocity;
 
     public bool IsActiveMove;
+    public bool IsJumping;
     AgentController _controller;
+    Rigidbody rigidbody;
 
     private void Awake()
     {
         _controller = GetComponent<AgentController>();
         _agentAnimator = transform.Find("Visual").GetComponent<AgentAnimator>();
-        _characterController = GetComponent<CharacterController>();
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     public void SetMovementVelocity(Vector3 value)
@@ -31,7 +33,7 @@ public class AgentMovement : MonoBehaviour
 
     public void SetDoJump(float jumpPower, Vector3 dir)
     {
-
+        rigidbody.AddForce(dir * jumpPower, ForceMode.Impulse);
     }
 
     private void CalculatePlayerMovement()
@@ -68,18 +70,18 @@ public class AgentMovement : MonoBehaviour
         {
             CalculatePlayerMovement();
         }
-
-        if (_characterController.isGrounded == false)
-        {
-            _verticalVelocity = _gravity * Time.fixedDeltaTime;
-        }
-        else
-        {
-            _verticalVelocity = _gravity * 0.3f * Time.fixedDeltaTime;
-        }
+        
 
         Vector3 move = _movementVelocity + _verticalVelocity * Vector3.up;
-        _characterController.Move(move);
-        _agentAnimator?.SetAirbone(!_characterController.isGrounded);
+        //_characterController.Move(move);
+        //_agentAnimator?.SetAirbone(!_characterController.isGrounded);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            IsJumping = false;
+        }
     }
 }
