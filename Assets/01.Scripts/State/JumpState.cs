@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class JumpState : CommonState
 {
     [SerializeField]
-    private float _jumpPower = 5f, _animationThreshhold = 0.1f;
+    private float _animationThreshhold = 0.1f;
     private float _timer = 0;
+
+    public UnityEvent playingLandingEvent;
 
     public override void OnEnterState()
     {
@@ -18,23 +21,24 @@ public class JumpState : CommonState
         Vector3 dir = _agentInput.GetCurrentInputDirection();
         if(dir.magnitude < 0.1f)
         {
-            dir = _agentController.transform.forward;
+            dir = _agentController.transform.forward + _agentController.transform.up;
         }
         _agentMovement.SetRotation(dir + _agentController.transform.position);
 
         _agentMovement.StopImmediately();
-        _agentMovement.SetDoJump(_jumpPower, dir);
+        _agentMovement.SetDoJump(_agentController.CharacterData.JumpPower, dir);
         
     }
 
     private void JumpEndHandle()
     {
-        
+        playingLandingEvent.Invoke();
+        //_agentController.ChangeState(Core.StateType.Normal);
     }
 
     public override void OnExitState()
     {
-        
+        _agentAnimator.OnAnimationEndTrigger -= JumpEndHandle;
     }
 
     public override bool OnUpdateState()

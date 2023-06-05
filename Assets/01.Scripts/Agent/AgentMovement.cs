@@ -5,7 +5,6 @@ using UnityEngine;
 public class AgentMovement : MonoBehaviour
 {
     [SerializeField] float _gravity = -9.8f;
-    [SerializeField] Transform _GroundDetectPoint;
     private AgentAnimator _agentAnimator;
 
     private Vector3 _movementVelocity;
@@ -15,14 +14,14 @@ public class AgentMovement : MonoBehaviour
 
     public bool IsActiveMove;
     public bool IsJumping;
-    AgentController _controller;
-    Rigidbody rigidbody;
+    AgentController _agentController;
+    Rigidbody rb;
 
     private void Awake()
     {
-        _controller = GetComponent<AgentController>();
+        _agentController = GetComponent<AgentController>();
         _agentAnimator = transform.Find("Visual").GetComponent<AgentAnimator>();
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     public void SetMovementVelocity(Vector3 value)
@@ -33,7 +32,8 @@ public class AgentMovement : MonoBehaviour
 
     public void SetDoJump(float jumpPower, Vector3 dir)
     {
-        rigidbody.AddForce(dir * jumpPower, ForceMode.Impulse);
+        rb.AddForce(dir * jumpPower, ForceMode.Impulse);
+        _agentController.ChangeState(Core.StateType.Normal);
     }
 
     private void CalculatePlayerMovement()
@@ -44,7 +44,7 @@ public class AgentMovement : MonoBehaviour
 
         _agentAnimator?.SetSpeed(_movementVelocity.sqrMagnitude);
 
-        _movementVelocity *= _controller.CharacterData.MoveSpeed * Time.fixedDeltaTime;
+        _movementVelocity *= _agentController.CharacterData.MoveSpeed * Time.fixedDeltaTime;
         if(_movementVelocity.sqrMagnitude > 0)
         {
             transform.rotation = Quaternion.LookRotation(_movementVelocity);
@@ -56,6 +56,11 @@ public class AgentMovement : MonoBehaviour
         Vector3 dir = target - transform.position;
         dir.y = 0;
         transform.rotation = Quaternion.LookRotation(dir);
+    }
+
+    public Vector3 ResetOrientation(Vector3 dir)
+    {
+        return Quaternion.Euler(0, -45f, 0) * dir;
     }
 
     public void StopImmediately()
@@ -71,9 +76,9 @@ public class AgentMovement : MonoBehaviour
             CalculatePlayerMovement();
         }
         
+        Vector3 move = new Vector3(_movementVelocity.x, rb.velocity.y, _movementVelocity.z);
+        rb.velocity = move;
 
-        Vector3 move = _movementVelocity + _verticalVelocity * Vector3.up;
-        //_characterController.Move(move);
         //_agentAnimator?.SetAirbone(!_characterController.isGrounded);
     }
 

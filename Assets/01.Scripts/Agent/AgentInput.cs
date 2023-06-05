@@ -60,6 +60,7 @@ public class AgentInput : MonoBehaviour
         _whatIsGround);
         if (result)
         {
+            Debug.Log("Hit");
             return hit.point;
         }
         else
