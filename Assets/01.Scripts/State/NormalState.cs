@@ -8,6 +8,7 @@ public class NormalState : CommonState
 {
     KeyCode debugKey = KeyCode.LeftShift;
     [SerializeField] Transform _ShootPoint;
+    [SerializeField] Transform _targetPointCircle;
     LineRenderer _lineRenderer;
     public int RenderPositionMaxCnt = 60;
 
@@ -71,19 +72,19 @@ public class NormalState : CommonState
 
         Vector3 startPos = _ShootPoint.position;
         Vector3 endPos = _agentInput.GetMouseWorldPosition();
+        float distanceX = endPos.x - startPos.x;
+        float distanceZ = endPos.z - startPos.z;
+        float Distance = Vector3.Distance(startPos, endPos);
+
+        Vector3 cp1 = new Vector3(startPos.x + distanceX / 3, Distance/2, startPos.z + distanceZ / 3);
+        Vector3 cp2 = new Vector3(startPos.x + distanceX / 3 * 2, Distance/2, startPos.z + distanceZ / 3 * 2);
 
         Vector3[] positions = new Vector3[RenderPositionMaxCnt + 1];
-
-        for(int i = 0; i < RenderPositionMaxCnt; i++)
-        {
-            float t = i / (RenderPositionMaxCnt - 1);
-            Vector3 pos = Vector3.Slerp(startPos, endPos, t);
-            Debug.Log("Pos " + t);
-            positions[i] = pos;
-        }
-
-
+        positions = DOCurve.CubicBezier.GetSegmentPointCloud(startPoint: startPos,
+            startControlPoint: cp1, endPoint: endPos, endControlPoint: cp2, RenderPositionMaxCnt);
         _lineRenderer.SetPositions(positions);
+
+        _targetPointCircle.position = endPos;
 
         drawPos = false;
         
