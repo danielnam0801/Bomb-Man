@@ -10,7 +10,7 @@ public class AgentController : MonoBehaviour
     public CharacterDataSO CharacterData => _characterData;
 
     private Dictionary<StateType, IState> _stateDictionary = null;
-    private IState _currentState;
+    public IState _currentState;
 
     private void Awake()
     {

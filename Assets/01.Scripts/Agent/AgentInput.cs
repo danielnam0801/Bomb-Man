@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using static Core.Define;
 
@@ -14,10 +15,11 @@ public class AgentInput : MonoBehaviour
     private Vector3 _directionInput;
     public Vector3 DirectionInput => _directionInput;
 
+    public bool CanCheckAttackInput = false;
+
     void Update()
     {
         UpdateMoveInput();
-        UpdateAttackInput();
         UpdateJumpInput();
     }
 
@@ -29,12 +31,9 @@ public class AgentInput : MonoBehaviour
         }
     }
 
-    private void UpdateAttackInput()
+    public void SetPlayAttackHandle()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            OnAttackKeyPress?.Invoke();
-        }
+        OnAttackKeyPress?.Invoke();
     }
 
     private void UpdateMoveInput()
@@ -60,7 +59,7 @@ public class AgentInput : MonoBehaviour
         _whatIsGround);
         if (result)
         {
-            Debug.Log("Hit");
+            //Debug.Log("Hit");
             return hit.point;
         }
         else
@@ -68,4 +67,5 @@ public class AgentInput : MonoBehaviour
             return Vector3.zero;
         }
     }
+
 }
