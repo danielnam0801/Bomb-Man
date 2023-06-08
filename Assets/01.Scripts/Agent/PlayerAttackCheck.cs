@@ -14,7 +14,7 @@ public class PlayerAttackCheck : MonoBehaviour
     AgentInput _agentInput;
     ActionData _actionData;
 
-    public int RenderPositionMaxCnt = 60;
+    public int RenderPositionMaxCnt = 20;
     
     bool haveTocheck = true;
     bool drawPos = false;

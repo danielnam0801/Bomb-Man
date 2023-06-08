@@ -21,7 +21,7 @@ public class Dynamite : PoolableMono
     public bool dynaActive = true;
     
 
-    [SerializeField] ParticleSystem bombParticle;
+    [SerializeField] EffectPlayer bombEffect;
 
     private void Awake()
     {
@@ -34,6 +34,9 @@ public class Dynamite : PoolableMono
         rb.velocity = Vector3.zero;
         dynaActive = true;
         BombAct += () => dynaActive = false;
+        Debug.Log("BoombEffect : " + bombEffect);
+        BombAct += () => VFXManager.Instance.SpawningEffect(bombEffect, transform.position, Quaternion.identity);
+        //BombAct += () => 
         //ThrowStart += () => col.isTrigger = true;
         //FallEnd += () => col.isTrigger = false;
     }
@@ -55,8 +58,8 @@ public class Dynamite : PoolableMono
 
         for (int i = 0; i < positions.Length - 2; i++)
         {
-            rb.velocity = (positions[i + 1] - positions[i]) * 100;
-            yield return new WaitForSeconds(1/30);
+            rb.velocity = (positions[i + 1] - positions[i]) * 50f;
+            yield return new WaitForSeconds(0.0125f);
         }
 
         FallEnd?.Invoke();
@@ -77,11 +80,11 @@ public class Dynamite : PoolableMono
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("CollisionHit");
+        //BombAct?.Invoke();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TriggerHit");
+        //BombAct?.Invoke();
     }
 }

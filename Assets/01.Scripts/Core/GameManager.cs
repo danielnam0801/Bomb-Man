@@ -36,8 +36,19 @@ public class GameManager : MonoBehaviour
         CreatePool();
         CreateTimeController();
         CreateUIManager();
+        CreateBombManager();
+        CreateVFXManager();
     }
 
+    private void CreateBombManager()
+    {
+        BombManager.Instance = gameObject.AddComponent<BombManager>();
+    }
+
+    private void CreateVFXManager()
+    {
+        VFXManager.Instance = gameObject.AddComponent<VFXManager>();
+    }
 
     private void CreatePool()
     {

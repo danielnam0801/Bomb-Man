@@ -2679,8 +2679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dabefa79e6ce8a4ab0faad2bb22d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dynamite: {fileID: 8456518149652449263, guid: 3126d863603cb784cbe3eed9fa06c18a,
-    type: 3}
 --- !u!114 &1465891036
 MonoBehaviour:
   m_ObjectHideFlags: 0

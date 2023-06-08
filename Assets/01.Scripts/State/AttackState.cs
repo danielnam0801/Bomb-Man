@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class AttackState : CommonState
 {
-    [SerializeField] PoolableMono _dynamite;
-
     Dynamite dynamite;
     public override void OnEnterState()
     {
-        dynamite = PoolManager.Instance.Pop(_dynamite.name) as Dynamite;
+        dynamite = PoolManager.Instance.
+            Pop(BombManager.Instance.SelectBomb()) as Dynamite;
         dynamite.Shoot(_actionData.StartPos, _actionData.cp1, _actionData.cp2, _actionData.EndPos, _actionData.PointCnt);
     }   
 
