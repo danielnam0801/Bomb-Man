@@ -13,4 +13,5 @@ public class ActionData : MonoBehaviour
     public Vector3 EndPos;
     public Vector3 cp1;
     public Vector3 cp2;
+    public int PointCnt;
 }

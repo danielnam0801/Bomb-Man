@@ -31,6 +31,11 @@ public class PlayerAttackCheck : MonoBehaviour
         _lineRenderer.positionCount = RenderPositionMaxCnt;
     }
 
+    private void Start()
+    {
+        _actionData.PointCnt = RenderPositionMaxCnt;
+    }
+
     private void Update()
     {
         if (_actionData.CanCheckAttack)
@@ -43,7 +48,7 @@ public class PlayerAttackCheck : MonoBehaviour
             Debug.Log("CurrentScrollValue : " + currentScrollValue);
             if (Input.GetMouseButton(0))
             {
-                _lineRenderer.enabled = true;
+                _lineRenderer.positionCount = RenderPositionMaxCnt;
                 _targetPointCircle.gameObject.SetActive(true);
                 DrawTrajectory();
                 Debug.Log("INPUTing");
@@ -55,7 +60,7 @@ public class PlayerAttackCheck : MonoBehaviour
             }
             else
             {
-                _lineRenderer.enabled = false;
+                _lineRenderer.positionCount = 0;
                 _targetPointCircle.gameObject.SetActive(false);
             }
         }
@@ -78,17 +83,23 @@ public class PlayerAttackCheck : MonoBehaviour
         positions = DOCurve.CubicBezier.GetSegmentPointCloud(startPoint: startPos,
             startControlPoint: cp1, endPoint: endPos, endControlPoint: cp2, RenderPositionMaxCnt);
 
-        for (int i = 0; i < positions.Length - 1; i++)
+        bool isHit = false;
+        int i = 0;
+        for (i = 0; i < positions.Length - 1; i++)
         {
             RaycastHit ray;
-            if (Physics.Raycast(positions[i], positions[i + 1] - positions[i], out ray,
-                Vector3.Magnitude(positions[i + 1] - positions[i]), LayerMask.NameToLayer("Ground")))
+            if (Physics.Raycast(positions[i], (positions[i + 1] - positions[i]).normalized, out ray,
+                Vector3.Distance(positions[i], positions[i + 1]), 1 << LayerMask.NameToLayer("Obstacle")))
             {
-                _lineRenderer.positionCount = i + 1;
+                isHit = true;
                 endPos = ray.point;
-                Debug.Log("LINEHITHIT");
                 break;
             }
+        }
+
+        Debug.Log("IsHit : " + isHit);
+        if (isHit) {
+            _lineRenderer.positionCount = i + 1;
         }
 
         _actionData.StartPos = startPos;
