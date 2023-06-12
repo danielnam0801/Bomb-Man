@@ -36,8 +36,16 @@ public class NormalState : CommonState
     private void OnAttackHandle()
     {
         _agentMovement.SetRotation(_agentInput.GetMouseWorldPosition());
-        _agentController.ChangeState(Core.StateType.Attack);
+        CreateAndShoot();
     }
+
+    private void CreateAndShoot()
+    {
+        Dynamite dynamite = PoolManager.Instance.
+            Pop(BombManager.Instance.SelectBomb()) as Dynamite;
+        dynamite.Shoot(_actionData.StartPos, _actionData.cp1, _actionData.cp2, _actionData.EndPos, _actionData.PointCnt);
+    }
+
 
     public override bool OnUpdateState()
     {

@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     private void Awake()
     {
         if(Instance != null)
@@ -37,12 +39,18 @@ public class GameManager : MonoBehaviour
         CreateTimeController();
         CreateUIManager();
         CreateBombManager();
+        CreatePlayerManager();
         CreateVFXManager();
     }
 
     private void CreateBombManager()
     {
         BombManager.Instance = gameObject.AddComponent<BombManager>();
+    } 
+
+    private void CreatePlayerManager()
+    {
+        PlayerManager.Instance = gameObject.AddComponent<PlayerManager>();
     }
 
     private void CreateVFXManager()

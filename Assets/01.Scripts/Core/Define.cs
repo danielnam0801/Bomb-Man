@@ -7,8 +7,7 @@ namespace Core
     public enum StateType
     {
         Normal,
-        Attack,
-        Jump,
+        Jump
     }
     public class Define {
         private static Camera _mainCam = null;

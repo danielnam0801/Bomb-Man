@@ -6,6 +6,7 @@ public class ActionData : MonoBehaviour
 {
     public Vector3 DirectionToFly;
     public bool IsGround;
+    public bool canJump;
     public bool JumpCnt;
     public bool CanCheckAttack = true;
 

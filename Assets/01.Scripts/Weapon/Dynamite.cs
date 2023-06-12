@@ -36,11 +36,17 @@ public class Dynamite : PoolableMono
         BombAct += () => dynaActive = false;
         Debug.Log("BoombEffect : " + bombEffect);
         BombAct += () => VFXManager.Instance.SpawningEffect(bombEffect, transform.position, Quaternion.identity);
-        //BombAct += () => 
+        BombAct += () => Explode();
         //ThrowStart += () => col.isTrigger = true;
         //FallEnd += () => col.isTrigger = false;
     }
-                
+
+    private void Explode()
+    {
+        PlayerManager.Instance.ActionData.canJump = true;
+        PoolManager.Instance.Push(this);
+    }
+
     public void Shoot(Vector3 startPos, Vector3 cp1, Vector3 cp2, Vector3 endPos, int pointsCnt)
     {
         transform.position = startPos;
