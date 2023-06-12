@@ -16,4 +16,4 @@ MonoBehaviour:
   BaseCriticial: 0.3
   BaseCriticialDamage: 15
   MoveSpeed: 200
-  JumpPower: 7
+  JumpPower: 50

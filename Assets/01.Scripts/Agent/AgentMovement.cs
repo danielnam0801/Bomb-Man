@@ -33,7 +33,6 @@ public class AgentMovement : MonoBehaviour
     public void SetDoJump(float jumpPower, Vector3 dir)
     {
         rb.AddForce(dir * jumpPower, ForceMode.Impulse);
-        _agentController.ChangeState(Core.StateType.Normal);
     }
 
     private void CalculatePlayerMovement()

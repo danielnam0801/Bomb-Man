@@ -6,8 +6,8 @@ public class ActionData : MonoBehaviour
 {
     public Vector3 DirectionToFly;
     public bool IsGround;
-    public bool canJump;
-    public bool JumpCnt;
+    public bool JumpCall;
+    public int JumpCnt;
     public bool CanCheckAttack = true;
 
     public Vector3 StartPos;
@@ -15,4 +15,6 @@ public class ActionData : MonoBehaviour
     public Vector3 cp1;
     public Vector3 cp2;
     public int PointCnt;
+
+    public Vector3 DynaBombPoint;
 }

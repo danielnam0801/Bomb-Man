@@ -34,8 +34,6 @@ public class Pool<T> where T : PoolableMono
         else
         {
             obj = _pool.Pop();
-            Debug.Log(_pool.Count);
-            Debug.Log(obj);
             obj.gameObject.SetActive(true);
         }
 
@@ -44,7 +42,6 @@ public class Pool<T> where T : PoolableMono
 
     public void Push(T obj)
     {
-        Debug.Log(obj);
         obj.gameObject.SetActive(false);
         _pool.Push(obj);
     }

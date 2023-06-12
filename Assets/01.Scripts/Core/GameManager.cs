@@ -78,7 +78,10 @@ public class GameManager : MonoBehaviour
         UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
     }
 
-
+    public Vector3 ReturnVector3PosXZ(Vector3 pos)
+    {
+        return new Vector3(pos.x, 0, pos.z);
+    }
     #region 디버그 모드
 
     [SerializeField]

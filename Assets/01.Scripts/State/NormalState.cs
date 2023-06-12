@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class NormalState : CommonState
 {
-
     public override void OnEnterState()
     {
         _agentMovement.StopImmediately();
@@ -49,6 +48,10 @@ public class NormalState : CommonState
 
     public override bool OnUpdateState()
     {
+        if(_actionData.JumpCall == true)
+        {
+            OnJumpingHandle();
+        }
         return false;
     }
 
