@@ -7,8 +7,15 @@ namespace Core
     public enum StateType
     {
         Normal,
-        Jump
+        Jump,
+        //OnHit
     }
+
+    public enum ResourceType
+    {
+        
+    }
+
     public class Define {
         private static Camera _mainCam = null;
         public static Camera MainCam

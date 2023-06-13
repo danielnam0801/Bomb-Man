@@ -30,9 +30,9 @@ public class AgentMovement : MonoBehaviour
         _movementVelocity = value;
     }
 
-    public void SetDoJump(float jumpPower, Vector3 dir)
+    public void SetExplosion(float jumpPower, Vector3 dir)
     {
-        rb.AddForce(dir * jumpPower, ForceMode.Impulse);
+        rb.AddForce(jumpPower * dir, ForceMode.Impulse);
     }
 
     private void CalculatePlayerMovement()
@@ -70,22 +70,26 @@ public class AgentMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsActiveMove)
+        IsJumping = PlayerManager.Instance.ActionData.IsJumping;
+        if (!IsJumping)
         {
-            CalculatePlayerMovement();
-        }
+            if (IsActiveMove)
+            {
+                CalculatePlayerMovement();
+            }
         
-        Vector3 move = new Vector3(_movementVelocity.x, rb.velocity.y, _movementVelocity.z);
-        rb.velocity = move;
+            Vector3 move = new Vector3(_movementVelocity.x, rb.velocity.y, _movementVelocity.z);
+            rb.velocity = move;
 
-        //_agentAnimator?.SetAirbone(!_characterController.isGrounded);
+            //_agentAnimator?.SetAirbone(!_characterController.isGrounded);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Ground"))
         {
-            IsJumping = false;
+            PlayerManager.Instance.ActionData.IsGround = true;
         }
     }
 }

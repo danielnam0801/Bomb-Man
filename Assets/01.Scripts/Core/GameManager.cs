@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private PoolingListSO _poolingList;
+      
+    public LayerMask whatIsGround;
 
     private Transform _playerTrm;
     public Transform PlayerTrm

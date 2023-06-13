@@ -42,8 +42,31 @@ public class Dynamite : PoolableMono
 
     private void Explode()
     {
-        PlayerManager.Instance.ActionData.JumpCall = true;
-        PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+        //Collider[] colliders = Physics.OverlapSphere(transform.position, radius: 8f);
+
+        //foreach(Collider nearby in colliders)
+        //{
+        //    Rigidbody rigg = nearby.GetComponent<Rigidbody>();
+        //    if(rigg != null)
+        //    {
+        //        rigg.AddExplosionForce(4000f, transform.position, 8f);
+        //    }
+        //}
+
+        bool isPlayerinRange = false;
+        float radius = PlayerManager.Instance.
+            AgentController.CharacterData.CanApplyBombRadius;
+
+        Collider[] playerCheck = Physics.OverlapSphere(transform.position, radius, 1 << LayerMask.NameToLayer("Player"));
+        
+        isPlayerinRange = playerCheck.Length > 0; // player가 감지 되었으면 true
+        
+        if(isPlayerinRange == true)
+        {
+            PlayerManager.Instance.ActionData.JumpCall = true;
+            PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+        }
+
         PoolManager.Instance.Push(this);
     }
 

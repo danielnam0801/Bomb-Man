@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerAttackCheck : MonoBehaviour
 {
-    KeyCode debugKey = KeyCode.LeftShift;
-    
     [SerializeField] Transform _ShootPoint;
     [SerializeField] Transform _targetPointCircle;
     
@@ -16,7 +14,6 @@ public class PlayerAttackCheck : MonoBehaviour
 
     public int RenderPositionMaxCnt = 20;
     
-    bool haveTocheck = true;
     bool drawPos = false;
 
     float currentScrollValue = 0f;

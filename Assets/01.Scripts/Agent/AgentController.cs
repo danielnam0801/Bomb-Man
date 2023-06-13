@@ -11,6 +11,7 @@ public class AgentController : MonoBehaviour
 
     private Dictionary<StateType, IState> _stateDictionary = null;
     public IState _currentState;
+    public bool IsDead = false;
 
     private void Awake()
     {

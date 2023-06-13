@@ -24,7 +24,8 @@ public class NormalState : CommonState
 
     private void OnMovementHandle(Vector3 obj)
     {
-        _agentMovement.SetMovementVelocity(obj);
+        if(_actionData.IsJumping == false)
+            _agentMovement.SetMovementVelocity(obj);
     }
 
     private void OnJumpingHandle()

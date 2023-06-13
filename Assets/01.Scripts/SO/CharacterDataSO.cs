@@ -10,4 +10,5 @@ public class CharacterDataSO : ScriptableObject
     public float BaseCriticialDamage;
     public float MoveSpeed;
     public float JumpPower = 30f;
+    public float CanApplyBombRadius = 5f;
 }
