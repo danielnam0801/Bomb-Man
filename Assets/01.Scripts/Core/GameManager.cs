@@ -76,8 +76,8 @@ public class GameManager : MonoBehaviour
 
     private void CreateUIManager()
     {
-        UIDocument uidocument = FindObjectOfType<UIDocument>();
-        UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
+        //UIDocument uidocument = FindObjectOfType<UIDocument>();
+        //UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
     }
 
     public Vector3 ReturnVector3PosXZ(Vector3 pos)
