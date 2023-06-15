@@ -11,7 +11,7 @@ public class IdleAIState : CommonAIState
 
     public override void OnExitState()
     {
-        
+        _enemyController.AgentAnimator.SetDetectPlayer();
     }
 
     public override bool OnUpdateState()

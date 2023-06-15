@@ -2,68 +2,69 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class AttackAIState : CommonAIState
+public class BossAttackAIState : CommonAIState
 {
+    public RBBossAIBrain.AttackType thisAttackType;
+
     protected Vector3 _targetVector;
     protected bool _isActive = false;
 
-    private float _lastAtkTime;
-
     private EnemyDataSO _dataSO;
+
+    private RbBossAttack thisAttack;
+
+    public UnityEvent AttackAnimationEndEvent;
+    public UnityEvent AttackCollisionEvent;
 
     public override void SetUp(Transform agentRoot)
     {
         base.SetUp(agentRoot);
+        thisAttack = _aiBrain.GetAttack(thisAttackType);
         _dataSO = _enemyController.EnemyData;
     }
 
     public override void OnEnterState()
     {
-        _enemyController.NavMovement.StopImmediately();
-        _enemyController.AgentAnimator.OnAnimationEndTrigger += AttackAnimationEndHandle;
-        _enemyController.AgentAnimator.OnAnimationEventTrigger += AttackCollisionHandle;
-        _enemyController.AgentAnimator.OnPreAnimationEventTrigger += PreAttackHandle;
         _isActive = true;
+
+        _enemyController.AgentAnimator.OnAnimationEndTrigger += AttackAnimationEndHandle;
+        _enemyController.AgentAnimator.OnAnimationEventTrigger += thisAttack.AttackAnimationEventHandle;
+        _enemyController.AgentAnimator.OnPreAnimationEventTrigger += PreAttackHandle;
+
+        _enemyController.NavMovement.StopImmediately();
+        _aiBrain.Attack(thisAttackType); // 실패시 바로 넥스트 스테이트로 넘어갈꺼임
     }
 
 
     public override void OnExitState()
     {
+
         _enemyController.AgentAnimator.OnAnimationEndTrigger -= AttackAnimationEndHandle;
-        _enemyController.AgentAnimator.OnAnimationEventTrigger -= AttackCollisionHandle;
+        _enemyController.AgentAnimator.OnAnimationEventTrigger -= thisAttack.AttackAnimationEventHandle;
         _enemyController.AgentAnimator.OnPreAnimationEventTrigger -= PreAttackHandle;
 
         _enemyController.AgentAnimator.SetAttackState(false);
-        _enemyController.AgentAnimator.SetAttackTrigger(false);
-        _enemyController.EnemyAttackCompo.CancelAttack();  //나갈때 공격하던거 취소 시키고
+        _enemyController.AgentAnimator.SetAttackTrigger(thisAttackType, false);
+
+        thisAttack.CancelAttack();  //나갈때 공격하던거 취소 시키고
         
-        _aiActionData.IsAttacking = false;
         _isActive = false;
+        _aiActionData.IsAttacking = false;
     }
 
     private void PreAttackHandle()
     {
-        _enemyController.EnemyAttackCompo.PreAttack();
+        thisAttack.PreAttack();
     }
 
     private void AttackAnimationEndHandle()
     {
         //애니메이션이 끝났을 때를 위한 식
+        AttackAnimationEndEvent?.Invoke();
+        _enemyController.NavMovement.ResetSpeed();
         _enemyController.AgentAnimator.SetAttackState(false);
-        _lastAtkTime = Time.time; //이제부터 1초 기다렸다가 다시 레이저 발사
-        StartCoroutine(DelayCoroutine(() => _aiActionData.IsAttacking = false, _dataSO.MotionDelay));
-    }
-
-    private IEnumerator DelayCoroutine(Action Callback, float time)
-    {
-        yield return new WaitForSeconds(time);
-        Callback?.Invoke();
-    }
-
-    private void AttackCollisionHandle()
-    {
-        _enemyController.EnemyAttackCompo.Attack(_dataSO.AtkDamage, _targetVector);
     }
 
     private void SetTarget()
@@ -96,11 +97,11 @@ public class AttackAIState : CommonAIState
                 _enemyController.transform.rotation
                     = Quaternion.Euler(0, sign * _dataSO.RotateSpeed * Time.deltaTime, 0) 
                         * _enemyController.transform.rotation;
-            }else if(_lastAtkTime + _dataSO.AtkCoolTime < Time.time) //쿨타임도 찼고 각도도 10도로 들어왔다면
+            }else //각도도 10도로 들어왔다면
             {
                 _aiActionData.IsAttacking = true;
                 _enemyController.AgentAnimator.SetAttackState(true);
-                _enemyController.AgentAnimator.SetAttackTrigger(true);
+                _enemyController.AgentAnimator.SetAttackTrigger(thisAttackType, true);
             }            
         }
 

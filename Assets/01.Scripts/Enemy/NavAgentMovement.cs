@@ -22,6 +22,8 @@ public class NavAgentMovement : MonoBehaviour
 
     private AIActionData _aiActionData;
 
+    private float defaultSpeed;
+
     protected void Awake()
     {
         _navAgent = GetComponent<NavMeshAgent>();
@@ -29,8 +31,16 @@ public class NavAgentMovement : MonoBehaviour
         _aiActionData = transform.Find("AI").GetComponent<AIActionData>();
     }
 
+    public void ResetSpeed() => _navAgent.speed = defaultSpeed;
+
+    public void SetSpeed(float speed)
+    {
+        _navAgent.speed = speed;
+    }
+
     public void SetInitData(float speed)
     {
+        defaultSpeed = speed;
         _navAgent.speed = speed;
         _navAgent.isStopped = false;  //1번 추가
         _isControllerMode = false;  //2번 추가

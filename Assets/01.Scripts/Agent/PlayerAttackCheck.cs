@@ -42,7 +42,7 @@ public class PlayerAttackCheck : MonoBehaviour
                 currentScrollValue = Input.mouseScrollDelta.y * 0.5f;
             }
             //currentScrollValue = Mathf.Clamp(currentScrollValue, minScrollValue, maxScrollValue);
-            Debug.Log("CurrentScrollValue : " + currentScrollValue);
+            //Debug.Log("CurrentScrollValue : " + currentScrollValue);
             if (Input.GetMouseButton(0))
             {
                 _lineRenderer.positionCount = RenderPositionMaxCnt;

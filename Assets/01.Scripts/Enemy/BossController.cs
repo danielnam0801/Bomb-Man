@@ -4,12 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyController : PoolableMono
+public class BossController : PoolableMono
 {
 
     [SerializeField]
     protected CommonAIState _currentState;
     public CommonAIState CurrentState => _currentState;
+
+    [SerializeField]
+    protected RBBossAIBrain _aiBrain;
+    public RBBossAIBrain AIBrain => _aiBrain;
+    
+    [field:SerializeField]
+    public BossAttackAIState CurrentAttack { get; set;}
 
     [SerializeField]
     protected EnemyDataSO _enemyData;
@@ -33,9 +40,6 @@ public class EnemyController : PoolableMono
     private CommonAIState _initState;
     private AIActionData _actionData;
 
-    private EnemyAttack _enemyAttack;
-    public EnemyAttack EnemyAttackCompo => _enemyAttack;
-
     private List<AITransition> _anyTransitions = new List<AITransition>();
     public List<AITransition> AnyTransitions => _anyTransitions;
 
@@ -53,7 +57,6 @@ public class EnemyController : PoolableMono
         _enemyHealth = GetComponent<EnemyHealth>();
 
         _actionData = transform.Find("AI").GetComponent<AIActionData>();
-        _enemyAttack = GetComponent<EnemyAttack>();
 
         Transform anyTranTrm = transform.Find("AI/AnyTransitions");
         if(anyTranTrm != null)

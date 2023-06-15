@@ -29,6 +29,7 @@ public class RBBossAIBrain : MonoBehaviour
 
     AgentMovement _movement;
     RobotBossPhaseData bossInfo;
+    AIActionData actionData;
 
     [Header("CoolValue")]
     [SerializeField] private float dashCool = 5f;    
@@ -40,6 +41,8 @@ public class RBBossAIBrain : MonoBehaviour
     public bool isUseAttackTerm = false;
     [SerializeField] private float attackTerm = 4f;
 
+    Queue<EnemyAttackData> attackQueue;
+
     private void Awake()
     {
         Init();
@@ -50,9 +53,11 @@ public class RBBossAIBrain : MonoBehaviour
     {
         _movement = GetComponent<AgentMovement>();
         bossInfo = transform.Find("AI").GetComponent<RobotBossPhaseData>();
+        actionData = transform.Find("AI").GetComponent<AIActionData>();
         _attackCoolList = new Dictionary<AttackType, float>();
         _canAttackList = new Dictionary<AttackType, bool>();
         _attackDictionary = new Dictionary<AttackType, EnemyAttackData>();
+        attackQueue = new Queue<EnemyAttackData>();
     }
 
     private void MakeAttackTypeAction()
@@ -65,38 +70,47 @@ public class RBBossAIBrain : MonoBehaviour
             attackName = AttackType.Dash,
             action = () =>
             {
+                actionData.IsAttacking = false;
                 bossInfo.isDashing = false;
                 _canAttackList[AttackType.Dash] = true;
                 SetCoolDown(AttackType.Dash, dashCool);
             },
             coolTime = dashCool,
         };
+        attackQueue.Enqueue(dashAttack);
         _attackDictionary.Add(dashAttack.attackName, dashAttack);
        
         EnemyAttackData jumpAttack = new EnemyAttackData()
         {
             atk = atkTrm.GetComponent<RbBossJumpAttack>(),
+            attackName = AttackType.Jump,
             action = () =>
             {
+                actionData.IsAttacking = false;
                 bossInfo.isJumping = false;
                 _canAttackList[AttackType.Jump] = true;
                 SetCoolDown(AttackType.Jump, JumpCool);
             },
             coolTime = JumpCool,
         };
+        attackQueue.Enqueue(jumpAttack);
         _attackDictionary.Add(jumpAttack.attackName, jumpAttack);
        
         EnemyAttackData shootAttack = new EnemyAttackData()
         {
             atk = atkTrm.GetComponent<RbBossShootAttack>(),
+            attackName = AttackType.Shoot,
             action = () =>
             {
+                actionData.IsAttacking = false;
                 bossInfo.isShooting = false;
                 _canAttackList[AttackType.Shoot] = true;
                 SetCoolDown(AttackType.Shoot, shootCool);
             },
             coolTime = shootCool,
         };
+
+        attackQueue.Enqueue(shootAttack);
         _attackDictionary.Add(shootAttack.attackName, shootAttack);
       
         foreach (var skill in _attackDictionary.Values)
@@ -109,6 +123,10 @@ public class RBBossAIBrain : MonoBehaviour
     public virtual void Attack(AttackType skillname)
     {
         if (bossInfo.CanAttack == false) return;
+
+        if (attackQueue.Peek() != _attackDictionary[skillname])
+            return;
+
         if (IsCanAttack(skillname) == false) return;
         if (isCoolDown(skillname) == false) return;
         
@@ -118,6 +136,7 @@ public class RBBossAIBrain : MonoBehaviour
             SetAttackValue(skillname);
             _canAttackList[skillname] = false;
             atkData.atk.Attack(atkData.action);
+            GotoEndQueue(); // 공격이 실행되었으면 우선순위 마지막으로 미룸
         }
     }
 
@@ -175,4 +194,23 @@ public class RBBossAIBrain : MonoBehaviour
             _attackCoolList.Add(key, coolDown);
         }
     }
+
+    public RbBossAttack GetAttack(AttackType key)
+    {
+        Debug.Log($"Key : {key}, {_attackDictionary[key]}");
+        return _attackDictionary[key].atk;
+    }
+
+    public void CallEndAct(AttackType key)
+    {
+        _attackDictionary[key].action?.Invoke();
+    }
+
+    void GotoEndQueue()
+    {
+        EnemyAttackData temp = attackQueue.Peek(); //뒷순위로 미룬다
+        attackQueue.Dequeue();
+        attackQueue.Enqueue(temp); // 
+    }
+
 }

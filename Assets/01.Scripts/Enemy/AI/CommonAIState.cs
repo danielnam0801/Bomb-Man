@@ -6,7 +6,8 @@ public abstract class CommonAIState : MonoBehaviour, IState
 {
     protected List<AITransition> _transitions;
 
-    protected EnemyController _enemyController;
+    protected BossController _enemyController;
+    protected RBBossAIBrain _aiBrain;
     protected AIActionData _aiActionData;
 
     public abstract void OnEnterState();
@@ -14,7 +15,8 @@ public abstract class CommonAIState : MonoBehaviour, IState
 
     public virtual void SetUp(Transform agentRoot)
     {
-        _enemyController = agentRoot.GetComponent<EnemyController>();
+        _enemyController = agentRoot.GetComponent<BossController>();
+        _aiBrain = agentRoot.GetComponent<RBBossAIBrain>();
         _aiActionData = agentRoot.Find("AI").GetComponent<AIActionData>();
 
         _transitions = new List<AITransition>();
