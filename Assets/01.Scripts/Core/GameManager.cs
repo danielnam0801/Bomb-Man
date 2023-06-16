@@ -19,13 +19,28 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if(_playerTrm == null)
+            if (_playerTrm == null)
             {
                 _playerTrm = GameObject.FindGameObjectWithTag("Player").transform;
             }
             return _playerTrm;
         }
     }
+
+    private Transform _playerOriginTrm;
+    public Transform PlayerOriginTrm
+    {
+        get
+        {
+            if(_playerOriginTrm == null)
+            {
+                _playerOriginTrm = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerPoint").transform;
+            }
+            return _playerOriginTrm;
+        }
+    }
+
+
 
 
 

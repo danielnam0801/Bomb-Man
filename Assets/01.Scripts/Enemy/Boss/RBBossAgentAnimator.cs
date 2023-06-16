@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RBBossAgentAnimator : AgentAnimator
+{
+
+    #region RBBoss영역
+    private readonly int _jumpHash = Animator.StringToHash("jump");
+    private readonly int _dashHash = Animator.StringToHash("dash");
+    private readonly int _shootHash = Animator.StringToHash("shoot");
+    private readonly int detectHash = Animator.StringToHash("detect");
+    private readonly int _dashEndHash = Animator.StringToHash("dashEnd");
+    private readonly int _walkRandHash = Animator.StringToHash("walkDirValue");
+    private readonly int _shootingTypeHash = Animator.StringToHash("shootType");
+
+    public void SetDashEndTrigger() => Animator.SetTrigger(_dashEndHash);
+    public void SetAttackTrigger(RBBossAIBrain.AttackType atkType, bool value)
+    {
+        if (value)
+        {
+            switch (atkType)
+            {
+                case RBBossAIBrain.AttackType.Dash:
+                    Animator.SetTrigger(_dashHash);
+                    break;
+                case RBBossAIBrain.AttackType.Shoot:
+                    Animator.SetTrigger(_shootHash);
+                    break;
+                case RBBossAIBrain.AttackType.Jump:
+                    Animator.SetTrigger(_jumpHash);
+                    break;
+            }
+        }
+        else
+        {
+            switch (atkType)
+            {
+                case RBBossAIBrain.AttackType.Dash:
+                    Animator.ResetTrigger(_dashHash);
+                    break;
+                case RBBossAIBrain.AttackType.Shoot:
+                    Animator.ResetTrigger(_shootHash);
+                    break;
+                case RBBossAIBrain.AttackType.Jump:
+                    Animator.ResetTrigger(_jumpHash); //이전 트리거 값이 남아있지 않도록 지워져야 한다.
+                    break;
+            }
+        }
+    }
+    public void SetDetectPlayer()
+    {
+        Animator.SetTrigger(detectHash);
+    }
+
+    public void SetRandDir(int value)
+    {
+        Animator.SetInteger(_walkRandHash, value);
+    }
+
+    public void SetShootingType(int value)
+    {
+        Animator.SetInteger(_shootingTypeHash, value);
+    }
+
+    #endregion
+
+}

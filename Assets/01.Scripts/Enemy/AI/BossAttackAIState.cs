@@ -21,13 +21,18 @@ public class BossAttackAIState : CommonAIState
     public override void SetUp(Transform agentRoot)
     {
         base.SetUp(agentRoot);
-        thisAttack = _aiBrain.GetAttack(thisAttackType);
         _dataSO = _enemyController.EnemyData;
+    }
+
+    private void Start()
+    {
+        thisAttack = _aiBrain.GetAttack(thisAttackType);
     }
 
     public override void OnEnterState()
     {
         _isActive = true;
+        _aiActionData.canMove = false;
 
         _enemyController.AgentAnimator.OnAnimationEndTrigger += AttackAnimationEndHandle;
         _enemyController.AgentAnimator.OnAnimationEventTrigger += thisAttack.AttackAnimationEventHandle;
@@ -64,7 +69,6 @@ public class BossAttackAIState : CommonAIState
         //애니메이션이 끝났을 때를 위한 식
         AttackAnimationEndEvent?.Invoke();
         _enemyController.NavMovement.ResetSpeed();
-        _enemyController.AgentAnimator.SetAttackState(false);
     }
 
     private void SetTarget()

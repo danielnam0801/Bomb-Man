@@ -39,20 +39,20 @@ public class PlayerAttackCheck : MonoBehaviour
         {
             if (Input.mouseScrollDelta.y != 0)
             {
-                currentScrollValue = Input.mouseScrollDelta.y * 0.5f;
+                currentScrollValue = Input.mouseScrollDelta.y / 2;
             }
-            //currentScrollValue = Mathf.Clamp(currentScrollValue, minScrollValue, maxScrollValue);
-            //Debug.Log("CurrentScrollValue : " + currentScrollValue);
+            currentScrollValue = Mathf.Clamp(currentScrollValue, minScrollValue, maxScrollValue);
+            Debug.Log("CurrentScrollValue : " + currentScrollValue);
             if (Input.GetMouseButton(0))
             {
                 _lineRenderer.positionCount = RenderPositionMaxCnt;
                 _targetPointCircle.gameObject.SetActive(true);
                 DrawTrajectory();
-                Debug.Log("INPUTing");
+                //Debug.Log("INPUTing");
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("InputUp");
+                //Debug.Log("InputUp");
                 _agentInput.SetPlayAttackHandle();
             }
             else
@@ -73,8 +73,11 @@ public class PlayerAttackCheck : MonoBehaviour
         float distanceZ = endPos.z - startPos.z;
         float Distance = Vector3.Distance(startPos, endPos);
 
-        Vector3 cp1 = new Vector3(startPos.x + distanceX / 3, Mathf.Clamp(Distance / 2 + currentScrollValue, 0.2f, 4f), startPos.z + distanceZ / 3);
-        Vector3 cp2 = new Vector3(startPos.x + distanceX / 3 * 2, Mathf.Clamp(Distance / 2 + currentScrollValue,0.2f, 4f), startPos.z + distanceZ / 3 * 2);
+        Debug.Log("y : " + Mathf.Clamp(Distance / 4 * currentScrollValue, 0.2f, 4f));
+        //Debug.Log();
+
+        Vector3 cp1 = new Vector3(startPos.x + distanceX / 3, startPos.y + Mathf.Clamp(Distance / 4 * currentScrollValue, 0.2f, 4f), startPos.z + distanceZ / 3);
+        Vector3 cp2 = new Vector3(startPos.x + distanceX / 3 * 2, startPos.y + Mathf.Clamp(Distance / 4 * currentScrollValue, 0.2f, 4f), startPos.z + distanceZ / 3 * 2);
 
         Vector3[] positions = new Vector3[RenderPositionMaxCnt + 1];
         positions = DOCurve.CubicBezier.GetSegmentPointCloud(startPoint: startPos,
@@ -93,8 +96,6 @@ public class PlayerAttackCheck : MonoBehaviour
                 break;
             }
         }
-
-        Debug.Log("IsHit : " + isHit);
         if (isHit) {
             _lineRenderer.positionCount = i + 1;
         }

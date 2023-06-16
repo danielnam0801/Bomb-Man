@@ -17,8 +17,6 @@ public class AgentAnimator : MonoBehaviour
     private readonly int _hurtTriggerHash = Animator.StringToHash("hurt");
     private readonly int _isHitHash = Animator.StringToHash("is_hit");
 
-    private readonly int detectHash = Animator.StringToHash("detect");
-
     private Animator _animator;
     public Animator Animator => _animator;
 
@@ -75,12 +73,6 @@ public class AgentAnimator : MonoBehaviour
         _animator.SetBool(_isDeadHash, true);
     }
 
-    public void SetDetectPlayer()
-    {
-        Animator.SetTrigger(detectHash);
-    }
-
-
     #region 애니메이션 이벤트 영역
     public event Action OnAnimationEndTrigger = null; //애니메이션이 종료될때마다 트리거 되는 이벤트임.
     public event Action OnAnimationEventTrigger = null; //애니메이션 내의 이벤트 트리거
@@ -101,46 +93,4 @@ public class AgentAnimator : MonoBehaviour
         OnPreAnimationEventTrigger?.Invoke();
     }
     #endregion
-    #region RBBoss영역
-    private readonly int _jumpHash = Animator.StringToHash("jump");
-    private readonly int _dashHash = Animator.StringToHash("dash");
-    private readonly int _dashEndHash = Animator.StringToHash("dashEnd");
-    private readonly int _shootHash = Animator.StringToHash("shoot");
-
-    public void SetDashEndTrigger() => Animator.SetTrigger(_dashEndHash);
-    public void SetAttackTrigger(RBBossAIBrain.AttackType atkType, bool value)
-    {
-        if (value)
-        {
-            switch (atkType)
-            {
-                case RBBossAIBrain.AttackType.Dash:
-                    Animator.SetTrigger(_dashHash);
-                    break;
-                case RBBossAIBrain.AttackType.Shoot:
-                    Animator.SetTrigger(_shootHash);
-                    break;
-                case RBBossAIBrain.AttackType.Jump:
-                    Animator.SetTrigger(_jumpHash);
-                    break;
-            }
-        }
-        else
-        {
-            switch (atkType)
-            {
-                case RBBossAIBrain.AttackType.Dash:
-                    Animator.ResetTrigger(_dashHash);
-                    break;
-                case RBBossAIBrain.AttackType.Shoot:
-                    Animator.ResetTrigger(_shootHash);
-                    break;
-                case RBBossAIBrain.AttackType.Jump:
-                    Animator.ResetTrigger(_jumpHash); //이전 트리거 값이 남아있지 않도록 지워져야 한다.
-                    break;
-            }
-        }
-    }
-    #endregion
-
 }

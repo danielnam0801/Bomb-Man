@@ -23,6 +23,8 @@ public class ChaseAIState : CommonAIState
 
     public override bool OnUpdateState()
     {
+        _aiActionData.canMove = false;
+       
         _enemyController.NavMovement.MoveToTarget(_aiActionData.LastSpotPoint);
         _aiActionData.IsArrived = _enemyController.NavMovement.CheckIsArrived();
 

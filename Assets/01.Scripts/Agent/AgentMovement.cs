@@ -71,6 +71,7 @@ public class AgentMovement : MonoBehaviour
     private void FixedUpdate()
     {
         IsJumping = PlayerManager.Instance.ActionData.IsJumping;
+        
         if (!IsJumping)
         {
             if (IsActiveMove)

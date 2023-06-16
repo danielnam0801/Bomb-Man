@@ -27,7 +27,7 @@ public class RBBossAIBrain : MonoBehaviour
     Dictionary<AttackType, EnemyAttackData> _attackDictionary;
     Dictionary<AttackType, bool> _canAttackList;
 
-    AgentMovement _movement;
+    NavAgentMovement _movement;
     RobotBossPhaseData bossInfo;
     AIActionData actionData;
 
@@ -51,7 +51,7 @@ public class RBBossAIBrain : MonoBehaviour
 
     private void Init()
     {
-        _movement = GetComponent<AgentMovement>();
+        _movement = GetComponent<NavAgentMovement>();
         bossInfo = transform.Find("AI").GetComponent<RobotBossPhaseData>();
         actionData = transform.Find("AI").GetComponent<AIActionData>();
         _attackCoolList = new Dictionary<AttackType, float>();
@@ -71,7 +71,7 @@ public class RBBossAIBrain : MonoBehaviour
             action = () =>
             {
                 actionData.IsAttacking = false;
-                bossInfo.isDashing = false;
+                bossInfo.IsDashing = false;
                 _canAttackList[AttackType.Dash] = true;
                 SetCoolDown(AttackType.Dash, dashCool);
             },
@@ -87,7 +87,7 @@ public class RBBossAIBrain : MonoBehaviour
             action = () =>
             {
                 actionData.IsAttacking = false;
-                bossInfo.isJumping = false;
+                bossInfo.IsJumping = false;
                 _canAttackList[AttackType.Jump] = true;
                 SetCoolDown(AttackType.Jump, JumpCool);
             },
@@ -103,7 +103,7 @@ public class RBBossAIBrain : MonoBehaviour
             action = () =>
             {
                 actionData.IsAttacking = false;
-                bossInfo.isShooting = false;
+                bossInfo.IsShooting = false;
                 _canAttackList[AttackType.Shoot] = true;
                 SetCoolDown(AttackType.Shoot, shootCool);
             },
@@ -122,14 +122,9 @@ public class RBBossAIBrain : MonoBehaviour
 
     public virtual void Attack(AttackType skillname)
     {
-        if (bossInfo.CanAttack == false) return;
-
-        if (attackQueue.Peek() != _attackDictionary[skillname])
-            return;
-
-        if (IsCanAttack(skillname) == false) return;
         if (isCoolDown(skillname) == false) return;
-        
+
+        Debug.Log("ThisAttack : " + skillname);
         EnemyAttackData atkData = null;
         if(_attackDictionary.TryGetValue(skillname, out atkData)){
             _movement.StopImmediately();
@@ -145,27 +140,14 @@ public class RBBossAIBrain : MonoBehaviour
         switch (key)
         {
             case AttackType.Shoot:
-                bossInfo.isShooting = true;
+                bossInfo.IsShooting = true;
                 break;
             case AttackType.Jump:
-                bossInfo.isJumping = true;
+                bossInfo.IsJumping = true;
                 break;
             case AttackType.Dash:
-                bossInfo.isDashing = true;
+                bossInfo.IsDashing = true;
                 break;
-        }
-    }
-
-    public bool IsCanAttack(AttackType key)
-    {
-        bool value;
-        if(_canAttackList.TryGetValue(key, out value))
-        {
-            return value;
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -197,8 +179,18 @@ public class RBBossAIBrain : MonoBehaviour
 
     public RbBossAttack GetAttack(AttackType key)
     {
+        foreach(var a in _attackDictionary)
+        {
+            Debug.Log($"keyName : {key}, {a.Value.attackName}");
+        }
         Debug.Log($"Key : {key}, {_attackDictionary[key]}");
         return _attackDictionary[key].atk;
+    }
+
+    public bool CheckAttack(AttackType key)
+    {
+        return bossInfo.CanAttack == true && _canAttackList[key] == true
+            && isCoolDown(key) == true;
     }
 
     public void CallEndAct(AttackType key)

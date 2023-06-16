@@ -31,8 +31,8 @@ public class BossController : PoolableMono
     private NavAgentMovement _navMovement;
     public NavAgentMovement NavMovement => _navMovement;
 
-    private AgentAnimator _agentAnimator;  //1
-    public AgentAnimator AgentAnimator => _agentAnimator; //2
+    private RBBossAgentAnimator _agentAnimator;  //1
+    public RBBossAgentAnimator AgentAnimator => _agentAnimator; //2
 
     private EnemyVFXManager _vfxManager;
     public EnemyVFXManager VFXManager => _vfxManager;
@@ -52,7 +52,7 @@ public class BossController : PoolableMono
         states.ForEach(s => s.SetUp(transform));
 
         _navMovement = GetComponent<NavAgentMovement>();
-        _agentAnimator = transform.Find("Visual").GetComponent<AgentAnimator>(); //3
+        _agentAnimator = transform.Find("Visual").GetComponent<RBBossAgentAnimator>(); //3
         _vfxManager = GetComponent<EnemyVFXManager>();
         _enemyHealth = GetComponent<EnemyHealth>();
 
@@ -70,7 +70,7 @@ public class BossController : PoolableMono
 
     protected virtual void Start()
     {
-        _targetTrm = GameManager.Instance.PlayerTrm;
+        _targetTrm = GameManager.Instance.PlayerOriginTrm;
         //나중에 직접 오버랩 스피어로 변경가능하다.
 
         _navMovement.SetInitData(_enemyData.MoveSpeed);

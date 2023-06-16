@@ -4,9 +4,19 @@ using UnityEngine;
 
 public class RobotBossPhaseData : MonoBehaviour
 {
-    public bool isDashing;
-    public bool isShooting;
-    public bool isJumping;
+    public bool IsDashing;
+    public bool IsShooting;
+    public bool IsJumping;
 
-    public bool CanAttack => isDashing == false && isShooting == false && isJumping == false;
+    public int currentPhase;
+
+    public bool CanAttack => IsDashing == false && IsShooting == false && IsJumping == false;
+
+    private void OnEnable()
+    {
+        currentPhase = 0;
+        IsDashing = false;
+        IsShooting = false;
+        IsJumping = false;
+    }
 }

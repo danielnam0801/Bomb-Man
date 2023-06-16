@@ -107,6 +107,7 @@ public class NavAgentMovement : MonoBehaviour
     {
         if (_isControllerMode == false) return;
 
+        Debug.Log(_characterController.isGrounded);
         if(_characterController.isGrounded == false)
         {
             _verticalVelocity = _gravity * Time.fixedDeltaTime;
