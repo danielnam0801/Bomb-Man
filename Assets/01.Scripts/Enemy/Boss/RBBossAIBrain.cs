@@ -11,7 +11,9 @@ public class RBBossAIBrain : MonoBehaviour
     public enum AttackType
     {
         Dash,
-        Shoot,
+        SingleShoot,
+        BurstShoot,
+        AutoShoot,
         Jump
     }
 
@@ -34,7 +36,9 @@ public class RBBossAIBrain : MonoBehaviour
     [Header("CoolValue")]
     [SerializeField] private float dashCool = 5f;    
     [SerializeField] private float JumpCool = 3f;    
-    [SerializeField] private float shootCool = 5f;    
+    [SerializeField] private float singleShootCool = 5f;    
+    [SerializeField] private float burstShootCool = 5f;    
+    [SerializeField] private float autoShootCool = 5f;    
 
     [Tooltip("공격사이에 공격간격두기")]
     [Header("AttackTerm")]
@@ -96,22 +100,56 @@ public class RBBossAIBrain : MonoBehaviour
         attackQueue.Enqueue(jumpAttack);
         _attackDictionary.Add(jumpAttack.attackName, jumpAttack);
        
-        EnemyAttackData shootAttack = new EnemyAttackData()
+        EnemyAttackData singleShootAttack = new EnemyAttackData()
         {
-            atk = atkTrm.GetComponent<RbBossShootAttack>(),
-            attackName = AttackType.Shoot,
+            atk = atkTrm.GetComponent<RBBossSingleAttack>(),
+            attackName = AttackType.SingleShoot,
             action = () =>
             {
                 actionData.IsAttacking = false;
-                bossInfo.IsShooting = false;
-                _canAttackList[AttackType.Shoot] = true;
-                SetCoolDown(AttackType.Shoot, shootCool);
+                bossInfo.IsSingleShooting = false;
+                _canAttackList[AttackType.SingleShoot] = true;
+                SetCoolDown(AttackType.SingleShoot, singleShootCool);
             },
-            coolTime = shootCool,
+            coolTime = singleShootCool,
+        };
+        attackQueue.Enqueue(singleShootAttack);
+        _attackDictionary.Add(singleShootAttack.attackName, singleShootAttack);
+
+
+        EnemyAttackData burstShootAttack = new EnemyAttackData()
+        {
+            atk = atkTrm.GetComponent<RBBossBurstAttack>(),
+            attackName = AttackType.BurstShoot,
+            action = () =>
+            {
+                actionData.IsAttacking = false;
+                bossInfo.IsBurstShooting = false;
+                _canAttackList[AttackType.BurstShoot] = true;
+                SetCoolDown(AttackType.BurstShoot, burstShootCool);
+            },
+            coolTime = burstShootCool,
         };
 
-        attackQueue.Enqueue(shootAttack);
-        _attackDictionary.Add(shootAttack.attackName, shootAttack);
+        attackQueue.Enqueue(burstShootAttack);
+        _attackDictionary.Add(burstShootAttack.attackName, burstShootAttack);
+      
+        EnemyAttackData autoShootAttack = new EnemyAttackData()
+        {
+            atk = atkTrm.GetComponent<RBBossAutoAttack>(),
+            attackName = AttackType.AutoShoot,
+            action = () =>
+            {
+                actionData.IsAttacking = false;
+                bossInfo.IsAutoShooting = false;
+                _canAttackList[AttackType.AutoShoot] = true;
+                SetCoolDown(AttackType.AutoShoot, autoShootCool);
+            },
+            coolTime = autoShootCool,
+        };
+
+        attackQueue.Enqueue(autoShootAttack);
+        _attackDictionary.Add(autoShootAttack.attackName, autoShootAttack);
       
         foreach (var skill in _attackDictionary.Values)
         {
@@ -139,8 +177,14 @@ public class RBBossAIBrain : MonoBehaviour
     {
         switch (key)
         {
-            case AttackType.Shoot:
-                bossInfo.IsShooting = true;
+            case AttackType.SingleShoot:
+                bossInfo.IsSingleShooting = true;
+                break;     
+            case AttackType.BurstShoot:
+                bossInfo.IsBurstShooting = true;
+                break;            
+            case AttackType.AutoShoot:
+                bossInfo.IsAutoShooting = true;
                 break;
             case AttackType.Jump:
                 bossInfo.IsJumping = true;

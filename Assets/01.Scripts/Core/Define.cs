@@ -18,6 +18,12 @@ namespace Core
     }
 
     public class Define {
+        private static int mapXSize = 50;
+        private static int mapZSize = 50;
+
+        public static int MAPXSIZE => mapXSize;
+        public static int MAPZSIZE => mapZSize;
+
         private static Camera _mainCam = null;
         public static Camera MainCam
         {

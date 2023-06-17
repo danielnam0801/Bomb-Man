@@ -6,6 +6,6 @@ using UnityEngine;
 public class BulletDataSO : ScriptableObject
 {
     public float speed;
-    public float damage;
+    public int damage;
     public AudioClip hitSound;
 }

@@ -6,7 +6,7 @@ public abstract class Projectile : PoolableMono
 {
     [SerializeField] protected BulletDataSO bulletData;
     AudioSource audioSource;
-    public abstract void Shoot(Vector3 dir);
+    public abstract void Shoot();
 
     protected virtual void Awake()
     {

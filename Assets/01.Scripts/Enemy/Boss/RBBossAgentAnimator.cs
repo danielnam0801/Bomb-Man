@@ -9,12 +9,19 @@ public class RBBossAgentAnimator : AgentAnimator
     private readonly int _jumpHash = Animator.StringToHash("jump");
     private readonly int _dashHash = Animator.StringToHash("dash");
     private readonly int _shootHash = Animator.StringToHash("shoot");
+    private readonly int _runDirChangeTriggerHash = Animator.StringToHash("runDirChange");
+    private readonly int _shootWaitHash = Animator.StringToHash("shootWait");
+
     private readonly int detectHash = Animator.StringToHash("detect");
     private readonly int _dashEndHash = Animator.StringToHash("dashEnd");
     private readonly int _walkRandHash = Animator.StringToHash("walkDirValue");
     private readonly int _shootingTypeHash = Animator.StringToHash("shootType");
+    private readonly int _useSideHash = Animator.StringToHash("useWalkSideAnim");
 
     public void SetDashEndTrigger() => Animator.SetTrigger(_dashEndHash);
+    public void ChangeRunDirTrigger() => Animator.SetTrigger(_runDirChangeTriggerHash);
+    public void ShootWaitTrigger() => Animator.SetTrigger(_shootWaitHash);
+    public void UseSide(bool value) => Animator.SetBool(_useSideHash, value);
     public void SetAttackTrigger(RBBossAIBrain.AttackType atkType, bool value)
     {
         if (value)
@@ -24,7 +31,7 @@ public class RBBossAgentAnimator : AgentAnimator
                 case RBBossAIBrain.AttackType.Dash:
                     Animator.SetTrigger(_dashHash);
                     break;
-                case RBBossAIBrain.AttackType.Shoot:
+                case RBBossAIBrain.AttackType.SingleShoot:
                     Animator.SetTrigger(_shootHash);
                     break;
                 case RBBossAIBrain.AttackType.Jump:
@@ -39,7 +46,7 @@ public class RBBossAgentAnimator : AgentAnimator
                 case RBBossAIBrain.AttackType.Dash:
                     Animator.ResetTrigger(_dashHash);
                     break;
-                case RBBossAIBrain.AttackType.Shoot:
+                case RBBossAIBrain.AttackType.SingleShoot:
                     Animator.ResetTrigger(_shootHash);
                     break;
                 case RBBossAIBrain.AttackType.Jump:

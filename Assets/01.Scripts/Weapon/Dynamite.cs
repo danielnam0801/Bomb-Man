@@ -19,9 +19,11 @@ public class Dynamite : PoolableMono
     Rigidbody rb;
 
     public bool dynaActive = true;
-    
+    public bool isEnemyBomb = false;
 
     [SerializeField] EffectPlayer bombEffect;
+    [SerializeField] float radius = 5f;
+    public int Damage { get; set; }
 
     private void Awake()
     {
@@ -33,11 +35,10 @@ public class Dynamite : PoolableMono
     {
         rb.velocity = Vector3.zero;
         dynaActive = true;
+        isHit = false;
         BombAct += () => dynaActive = false;
         BombAct += () => VFXManager.Instance.SpawningEffect(bombEffect, transform.position, Quaternion.identity);
         BombAct += () => Explode();
-        //ThrowStart += () => col.isTrigger = true;
-        //FallEnd += () => col.isTrigger = false;
     }
 
     private void Explode()
@@ -53,18 +54,38 @@ public class Dynamite : PoolableMono
         //    }
         //}
 
-        bool isPlayerinRange = false;
-        float radius = PlayerManager.Instance.
-            AgentController.CharacterData.CanApplyBombRadius;
-
-        Collider[] playerCheck = Physics.OverlapSphere(transform.position, radius, 1 << LayerMask.NameToLayer("Player"));
-        
-        isPlayerinRange = playerCheck.Length > 0; // player가 감지 되었으면 true
-        
-        if(isPlayerinRange == true)
+        if (!isEnemyBomb)
         {
-            PlayerManager.Instance.ActionData.JumpCall = true;
-            PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+            bool isPlayerinRange = false;
+            float radius = PlayerManager.Instance.
+                AgentController.CharacterData.CanApplyBombRadius;
+
+            Collider[] playerCheck = Physics.OverlapSphere(transform.position, radius, 1 << LayerMask.NameToLayer("Player"));
+        
+            isPlayerinRange = playerCheck.Length > 0; // player가 감지 되었으면 true
+        
+            if(isPlayerinRange == true)
+            {
+                PlayerManager.Instance.ActionData.JumpCall = true;
+                PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+            }
+        }
+        else { // 적이 쏜 폭탄일때
+            float radius = this.radius;
+            Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+            foreach(var a in colliders)
+            {
+                if (a != null)
+                {
+                    IDamageable damageable;
+                    if(a.transform.TryGetComponent<IDamageable>(out damageable))
+                    {
+
+                        damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
+                    }
+                }
+            }
+            
         }
 
         PoolManager.Instance.Push(this);
@@ -81,6 +102,24 @@ public class Dynamite : PoolableMono
         StartCoroutine(nameof(Shooting));
     }
 
+    public void EnemyShoot(Vector3 dir)
+    {
+
+    }
+
+    private bool isHit = false;
+    IEnumerator EnemyShooting()
+    {
+        ThrowStart?.Invoke();
+
+        yield return new WaitUntil(() => isHit);
+
+        FallEnd?.Invoke();
+        yield return new WaitForSeconds(bombDelay);
+
+        BombAct?.Invoke();
+    }
+    
     IEnumerator Shooting()
     {
         ThrowStart?.Invoke();
@@ -109,7 +148,7 @@ public class Dynamite : PoolableMono
 
     private void OnCollisionEnter(Collision collision)
     {
-        //BombAct?.Invoke();
+        isHit = true;
     }
 
     private void OnTriggerEnter(Collider other)

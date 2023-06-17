@@ -9,7 +9,7 @@ public class BurstProjectile : Projectile
         
     }
 
-    public override void Shoot(Vector3 dir)
+    public override void Shoot()
     {
         
     }

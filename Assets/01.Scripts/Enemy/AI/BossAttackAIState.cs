@@ -34,6 +34,8 @@ public class BossAttackAIState : CommonAIState
         _isActive = true;
         _aiActionData.canMove = false;
 
+        _enemyController.AgentAnimator.UseSide(false);
+
         _enemyController.AgentAnimator.OnAnimationEndTrigger += AttackAnimationEndHandle;
         _enemyController.AgentAnimator.OnAnimationEventTrigger += thisAttack.AttackAnimationEventHandle;
         _enemyController.AgentAnimator.OnPreAnimationEventTrigger += PreAttackHandle;
