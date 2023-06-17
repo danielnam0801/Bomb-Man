@@ -22,7 +22,9 @@ public class Dynamite : PoolableMono
     public bool isEnemyBomb = false;
 
     [SerializeField] EffectPlayer bombEffect;
-    [SerializeField] float radius = 5f;
+
+    float playerBombRad = 1f, bossBombRad = 1.5f, bossHitCriRad = 0.7f; float playerHitCriRad = 0.3f;
+
     public int Damage { get; set; }
 
     private void Awake()
@@ -56,22 +58,41 @@ public class Dynamite : PoolableMono
 
         if (!isEnemyBomb)
         {
-            bool isPlayerinRange = false;
             float radius = PlayerManager.Instance.
                 AgentController.CharacterData.CanApplyBombRadius;
 
-            Collider[] playerCheck = Physics.OverlapSphere(transform.position, radius, 1 << LayerMask.NameToLayer("Player"));
-        
-            isPlayerinRange = playerCheck.Length > 0; // player°¡ °¨Áö µÇ¾úÀ¸¸é true
-        
-            if(isPlayerinRange == true)
+            Collider[] playerBomb = Physics.OverlapSphere(transform.position, radius);
+
+            foreach (var a in playerBomb)
             {
-                PlayerManager.Instance.ActionData.JumpCall = true;
-                PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+                if (a.gameObject.CompareTag("Player"))
+                {
+                    PlayerManager.Instance.ActionData.JumpCall = true;
+                    PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+                }
+                else // ÀûÃ¼Å©
+                {
+                    if (a != null)
+                    {
+                        IDamageable damageable;
+                        if (a.transform.TryGetComponent<IDamageable>(out damageable))
+                        {
+                            float distance = Vector3.Distance(transform.position, a.transform.position);
+                            if (distance < bossHitCriRad) Damage *= 2;
+                            else
+                            {
+                                Damage -= (int)(distance * 5); //°Å¸®°¡ ¸Õ¸¸Å­ »©ÁÜ
+                            }
+                            Damage = Mathf.Clamp(Damage, 5, 20);
+                            Debug.Log("PlayerDamage : " + Damage);
+                            damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
+                        }
+                    }
+                }
             }
         }
         else { // ÀûÀÌ ½ð ÆøÅºÀÏ¶§
-            float radius = this.radius;
+            float radius = this.playerBombRad;
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach(var a in colliders)
             {
@@ -80,7 +101,14 @@ public class Dynamite : PoolableMono
                     IDamageable damageable;
                     if(a.transform.TryGetComponent<IDamageable>(out damageable))
                     {
-
+                        float distance = Vector3.Distance(transform.position, a.transform.position);
+                        if (distance < bossHitCriRad) Damage *= 2;
+                        else
+                        {
+                            Damage -= (int)(distance * 10); //°Å¸®°¡ ¸Õ¸¸Å­ »©ÁÜ
+                            Debug.Log("EnemyDamage : " + Damage);
+                        }
+                        Damage = Mathf.Clamp(Damage, 5, 20);
                         damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
                     }
                 }
@@ -91,7 +119,7 @@ public class Dynamite : PoolableMono
         PoolManager.Instance.Push(this);
     }
 
-    public void Shoot(Vector3 startPos, Vector3 cp1, Vector3 cp2, Vector3 endPos, int pointsCnt)
+    public void Shoot(Vector3 startPos, Vector3 cp1, Vector3 cp2, Vector3 endPos, int pointsCnt, float speed = 50f)
     {
         transform.position = startPos;
         positions = new Vector3[pointsCnt + 1];
@@ -99,37 +127,22 @@ public class Dynamite : PoolableMono
             startControlPoint: cp1, endPoint: endPos, endControlPoint: cp2, pointsCnt);
 
         positionMoveSpeed = Vector3.Distance(startPos, endPos);
-        StartCoroutine(nameof(Shooting));
-    }
-
-    public void EnemyShoot(Vector3 dir)
-    {
-
+        StartCoroutine(Shooting(speed));
     }
 
     private bool isHit = false;
-    IEnumerator EnemyShooting()
+
+    IEnumerator Shooting(float speed)
     {
         ThrowStart?.Invoke();
-
-        yield return new WaitUntil(() => isHit);
-
-        FallEnd?.Invoke();
-        yield return new WaitForSeconds(bombDelay);
-
-        BombAct?.Invoke();
-    }
-    
-    IEnumerator Shooting()
-    {
-        ThrowStart?.Invoke();
-
+        
         for (int i = 0; i < positions.Length - 2; i++)
         {
-            rb.velocity = (positions[i + 1] - positions[i]) * 50f;
+            if (isHit) break;
+            rb.velocity = (positions[i + 1] - positions[i]) * speed;
             yield return new WaitForSeconds(0.0125f);
         }
-
+    
         FallEnd?.Invoke();
         yield return new WaitForSeconds(bombDelay);
 

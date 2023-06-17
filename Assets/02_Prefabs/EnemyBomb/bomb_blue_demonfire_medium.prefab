@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 135104356025210756}
   - component: {fileID: 23663232943848196}
   - component: {fileID: 54940543535826582}
-  - component: {fileID: 5652469493404207601}
+  - component: {fileID: 623928125314836350}
   m_Layer: 0
-  m_Name: bomb_Purple_DarkFire_medium
+  m_Name: bomb_blue_demonfire_medium
   m_TagString: FX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 30185b13c51284c4ebef1baf02aa45b6, type: 2}
+  - {fileID: 2100000, guid: ba94e703cb800d141a963931f0e5baa7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5652469493404207601
+--- !u!114 &623928125314836350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,6 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynaActive: 1
-  bombParticle: {fileID: 3079747710681177514, guid: 903e801f854c3594999ca7cb92050c9e,
+  isEnemyBomb: 1
+  bombEffect: {fileID: 7965079042802378394, guid: c80add9b36d77a64bbc0b82c4ca7c690,
     type: 3}
-  bombEffect: {fileID: 0}

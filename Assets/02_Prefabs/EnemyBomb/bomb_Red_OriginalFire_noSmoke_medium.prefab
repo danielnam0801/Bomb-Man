@@ -128,6 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynaActive: 1
-  bombParticle: {fileID: 3247574520557239274, guid: 81fb43b8d3524b2478a3caa795d5bcca,
+  isEnemyBomb: 0
+  bombEffect: {fileID: 3247574520557239274, guid: 81fb43b8d3524b2478a3caa795d5bcca,
     type: 3}
-  bombEffect: {fileID: 0}

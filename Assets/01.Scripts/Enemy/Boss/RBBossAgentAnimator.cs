@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,8 @@ public class RBBossAgentAnimator : AgentAnimator
                     Animator.SetTrigger(_dashHash);
                     break;
                 case RBBossAIBrain.AttackType.SingleShoot:
+                case RBBossAIBrain.AttackType.AutoShoot:
+                case RBBossAIBrain.AttackType.BurstShoot:
                     Animator.SetTrigger(_shootHash);
                     break;
                 case RBBossAIBrain.AttackType.Jump:
@@ -69,6 +72,16 @@ public class RBBossAgentAnimator : AgentAnimator
     {
         Animator.SetInteger(_shootingTypeHash, value);
     }
+
+    public event Action BossJumpStartEventTrigger = null; //애니메이션이 종료될때마다 트리거 되는 이벤트임.
+
+    public void BossJumpStartEvent() //애니메이션이 종료되면 이게 실행된다.
+    {
+        BossJumpStartEventTrigger?.Invoke();
+    }
+
+
+
 
     #endregion
 

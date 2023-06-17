@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 135104356025210756}
   - component: {fileID: 23663232943848196}
   - component: {fileID: 54940543535826582}
-  - component: {fileID: 4228284589540381477}
+  - component: {fileID: 9019100117698838962}
   m_Layer: 0
-  m_Name: bomb_Red_OriginalFire_medium
+  m_Name: bomb_Funky_JokerFire_medium
   m_TagString: FX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4228284589540381477
+--- !u!114 &9019100117698838962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,6 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynaActive: 1
-  bombParticle: {fileID: -1693043085442330787, guid: 85faa2cbd1d5cfa4f822bb5c4ee3f98c,
+  isEnemyBomb: 0
+  bombEffect: {fileID: 6304447584533891535, guid: 14933de245c6d804f80f071fe8a2c9c4,
     type: 3}
-  bombEffect: {fileID: 0}

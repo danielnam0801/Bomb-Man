@@ -43,6 +43,8 @@ public class NormalState : CommonState
     {
         Dynamite dynamite = PoolManager.Instance.
             Pop(BombManager.Instance.SelectBomb()) as Dynamite;
+        dynamite.isEnemyBomb = false;
+        dynamite.Damage = _agentController.CharacterData.BaseDamage;
         dynamite.Shoot(_actionData.StartPos, _actionData.cp1, _actionData.cp2, _actionData.EndPos, _actionData.PointCnt);
     }
 

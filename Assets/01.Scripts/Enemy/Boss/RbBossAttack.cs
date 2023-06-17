@@ -8,7 +8,7 @@ public abstract class RbBossAttack : EnemyAttack
     protected AIActionData _actionData;
     protected RobotBossPhaseData _phaseData;
     protected BossController _controller;
-    public float Damage;
+    public int Damage;
 
     protected Action endAct;
 

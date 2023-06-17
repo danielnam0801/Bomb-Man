@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 
 public class RBBossBurstAttack : RbBossAttack
 {
-    [SerializeField] BurstProjectile burstProjectile;
+    [SerializeField] Dynamite burstProjectile;
     [SerializeField] Transform ShootPoint;
     [SerializeField] UnityEvent ChargeEvent;
 
@@ -103,10 +104,21 @@ public class RBBossBurstAttack : RbBossAttack
 
     private void BurstShoot()
     {
-        BurstProjectile burst = PoolManager.Instance.Pop(burstProjectile.gameObject.name) as BurstProjectile;
-        burst.transform.position = ShootPoint.position;
-        burst.Shoot();
+        Vector3 startPos = ShootPoint.position;
+        Vector3 randomAddPos = UnityEngine.Random.insideUnitSphere * 1.5f;
+        randomAddPos.y = 0;
+        Vector3 endPos = GameManager.Instance.PlayerOriginTrm.position + randomAddPos;
 
-        
+        Vector3 cp1 = new Vector3(startPos.x, startPos.y + UnityEngine.Random.Range(-2f, 2f), startPos.z);
+        Vector3 cp2 = new Vector3(endPos.x, startPos.y, endPos.z);
+
+        Vector3[] positions = new Vector3[20 + 1];
+        positions = DOCurve.CubicBezier.GetSegmentPointCloud(startPoint: startPos,
+            startControlPoint: cp1, endPoint: endPos, endControlPoint: cp2, 20);
+
+        Dynamite burst = PoolManager.Instance.Pop(burstProjectile.gameObject.name) as Dynamite;
+        burst.Damage = this.Damage;
+        burst.isEnemyBomb = true;
+        burst.Shoot(startPos, cp1, cp2, endPos, 20, UnityEngine.Random.Range(15f, 30f));
     }
 }
