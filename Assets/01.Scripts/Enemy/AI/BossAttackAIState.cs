@@ -47,7 +47,7 @@ public class BossAttackAIState : CommonAIState
 
     public override void OnExitState()
     {
-
+        Debug.Log("ExitState");
         _enemyController.AgentAnimator.OnAnimationEndTrigger -= AttackAnimationEndHandle;
         _enemyController.AgentAnimator.OnAnimationEventTrigger -= thisAttack.AttackAnimationEventHandle;
         _enemyController.AgentAnimator.OnPreAnimationEventTrigger -= PreAttackHandle;

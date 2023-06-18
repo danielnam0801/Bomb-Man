@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RobotBossPhaseData : MonoBehaviour
 {
@@ -10,13 +11,28 @@ public class RobotBossPhaseData : MonoBehaviour
     public bool IsAutoShooting;
     public bool IsJumping;
 
-    public int currentPhase;
+    private int currentPhase;
+
+    public UnityEvent PhaseChangeEvent;
+
+    public int CurrentPhase
+    {
+        get { return currentPhase; }
+        set
+        {
+            if(value != currentPhase)
+            {
+                PhaseChangeEvent?.Invoke();
+                currentPhase = value;
+            }
+        }
+    }
 
     public bool CanAttack => IsDashing == false && IsSingleShooting == false && IsJumping == false && IsBurstShooting == false && IsAutoShooting == false;
 
     private void OnEnable()
     {
-        currentPhase = 0;
+        currentPhase = 1;
         IsDashing = false;
         IsSingleShooting = false;
         IsBurstShooting = false;

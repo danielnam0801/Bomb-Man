@@ -20,15 +20,6 @@ public class AgentInput : MonoBehaviour
     void Update()
     {
         UpdateMoveInput();
-        UpdateJumpInput();
-    }
-
-    private void UpdateJumpInput()
-    {
-        if (Input.GetButtonDown("Jump"))
-        {
-            OnJumpKeyPress?.Invoke();
-        }
     }
 
     public void SetPlayAttackHandle()

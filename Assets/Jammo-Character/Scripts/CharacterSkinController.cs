@@ -74,15 +74,19 @@ public class CharacterSkinController : MonoBehaviour
         {
             case EyePosition.normal:
                 offset = new Vector2(0, 0);
+                ChangeMaterialSettings(0);
                 break;
             case EyePosition.happy:
                 offset = new Vector2(.33f, 0);
+                ChangeMaterialSettings(1);
                 break;
             case EyePosition.angry:
                 offset = new Vector2(.66f, 0);
+                ChangeMaterialSettings(2);
                 break;
             case EyePosition.dead:
                 offset = new Vector2(.33f, .66f);
+                ChangeMaterialSettings(3);
                 break;
             default:
                 break;

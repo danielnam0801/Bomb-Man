@@ -1,0 +1,40 @@
+.text {
+    left: 100px;
+    width: 440px;
+    height: 100px;
+    background-color: rgba(67, 67, 67, 0.27);
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-top-width: 10px;
+    border-bottom-width: 10px;
+    transition-duration: 0.3s;
+    overflow: visible;
+    border-left-color: rgb(24, 24, 24);
+    border-right-color: rgb(24, 24, 24);
+    border-top-color: rgb(24, 24, 24);
+    border-bottom-color: rgb(24, 24, 24);
+}
+
+.text:hover {
+    position: relative;
+    left: 120px;
+    bottom: 0;
+    width: 500px;
+    height: 120px;
+    background-color: rgba(108, 108, 108, 0.28);
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+}
+
+.textLabel {
+    font-size: 55px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(115, 85, 85);
+    -unity-font: url('project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0.TTF?fileID=12800000&guid=f82abf22d6bea754d9d1d86b8a06723e&type=3#LUCKIESTGUY_0');
+    -unity-font-definition: url('project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&guid=b67cde2e1748c9444bddfa70b9a92bb0&type=2#LUCKIESTGUY_0 SDF');
+    -unity-font-style: italic;
+    -unity-text-align: lower-center;
+    white-space: nowrap;
+    flex-shrink: 1;
+    flex-grow: 1;
+}

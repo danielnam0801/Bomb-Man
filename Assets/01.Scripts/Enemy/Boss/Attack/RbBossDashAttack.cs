@@ -38,9 +38,9 @@ public class RbBossDashAttack : RbBossAttack
     IEnumerator Dash()
     {
         int setMaxCnt;
-        if (_phaseData.currentPhase == 0)
+        if (_phaseData.CurrentPhase == 1)
             setMaxCnt = 1;
-        else if(_phaseData.currentPhase == 1)
+        else if(_phaseData.CurrentPhase == 2)
             setMaxCnt = UnityEngine.Random.Range(1, 3);
         else 
             setMaxCnt = UnityEngine.Random.Range(2, 4);

@@ -95,6 +95,20 @@ public class GameManager : MonoBehaviour
     {
         return new Vector3(pos.x, 0, pos.z);
     }
+
+    public Vector3 TargetGroundPos()
+    {
+        RaycastHit checkGround;
+        if(Physics.Raycast(PlayerOriginTrm.position, Vector3.down, out checkGround, 100f, _whatIsGround))
+        {
+            return checkGround.point;
+        }
+        else
+        {
+            return PlayerOriginTrm.position;
+        }
+        
+    }
     #region 디버그 모드
 
     [SerializeField]

@@ -17,6 +17,8 @@ public class AgentMovement : MonoBehaviour
     AgentController _agentController;
     Rigidbody rb;
 
+    [SerializeField] Transform GroundPos;
+
     private void Awake()
     {
         _agentController = GetComponent<AgentController>();
@@ -71,7 +73,10 @@ public class AgentMovement : MonoBehaviour
     private void FixedUpdate()
     {
         IsJumping = PlayerManager.Instance.ActionData.IsJumping;
-        
+
+        if (transform.position.y < GroundPos.position.y)
+            transform.position += new Vector3(0, GroundPos.position.y - transform.position.y, 0);
+
         if (!IsJumping)
         {
             if (IsActiveMove)

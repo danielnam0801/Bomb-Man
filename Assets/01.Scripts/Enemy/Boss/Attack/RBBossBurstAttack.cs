@@ -104,21 +104,31 @@ public class RBBossBurstAttack : RbBossAttack
 
     private void BurstShoot()
     {
-        Vector3 startPos = ShootPoint.position;
-        Vector3 randomAddPos = UnityEngine.Random.insideUnitSphere * 1.5f;
-        randomAddPos.y = 0;
-        Vector3 endPos = GameManager.Instance.PlayerOriginTrm.position + randomAddPos;
+        int spawnBulCnt = 0;
+        if (_phaseData.CurrentPhase == 1 || _phaseData.CurrentPhase == 0) spawnBulCnt = 1;
+        else if (_phaseData.CurrentPhase == 2) spawnBulCnt = UnityEngine.Random.Range(1, 3);
+        else if (_phaseData.CurrentPhase == 3) spawnBulCnt = UnityEngine.Random.Range(1, 4);
+        for (int i = 0; i < spawnBulCnt; i++)
+        {
+            Vector3 startPos = ShootPoint.position;
+            Vector3 endPos = GameManager.Instance.TargetGroundPos();
+            
+            Vector3 startControl = (endPos - transform.position) / 4;
 
-        Vector3 cp1 = new Vector3(startPos.x, startPos.y + UnityEngine.Random.Range(-2f, 2f), startPos.z);
-        Vector3 cp2 = new Vector3(endPos.x, startPos.y, endPos.z);
+            float distanceX = endPos.x - startPos.x;
+            float distanceZ = endPos.z - startPos.z;
 
-        Vector3[] positions = new Vector3[20 + 1];
-        positions = DOCurve.CubicBezier.GetSegmentPointCloud(startPoint: startPos,
-            startControlPoint: cp1, endPoint: endPos, endControlPoint: cp2, 20);
 
-        Dynamite burst = PoolManager.Instance.Pop(burstProjectile.gameObject.name) as Dynamite;
-        burst.Damage = this.Damage;
-        burst.isEnemyBomb = true;
-        burst.Shoot(startPos, cp1, cp2, endPos, 20, UnityEngine.Random.Range(15f, 30f));
+            Vector3 cp1 = new Vector3(distanceX / 3, 0, distanceZ / 3) + startPos;
+            Vector3 cp2 = new Vector3(distanceX / 3 * 3, 0, distanceZ / 3 * 3) + startPos;
+
+            cp2.y = endPos.y;
+
+            Dynamite burst = PoolManager.Instance.Pop(burstProjectile.gameObject.name) as Dynamite;
+            burst.Damage = this.Damage;
+            burst.isEnemyBomb = true;
+            burst.Shoot(startPos, cp1, cp2, endPos, 20, UnityEngine.Random.Range(10f, 25f));
+            burst.BombDelay = UnityEngine.Random.Range(1.3f, 1.8f);
+        }
     }
 }

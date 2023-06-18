@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public UnityEvent OnDeadTriggered = null;
 
     private AIActionData _aiActionData;
+    private RobotBossPhaseData _phaseData;
 
     public Action<int, int> OnHealthChanged = null;
 
@@ -24,6 +25,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         _aiActionData = transform.Find("AI").GetComponent<AIActionData>();
+        _phaseData = transform.Find("AI").GetComponent<RobotBossPhaseData>();
     }
 
     public void SetMaxHP(int value)
@@ -47,6 +49,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             IsDead = true;
             OnDeadTriggered?.Invoke();
         }
+
+        int value = (int)(((float)CurrentHP / (float)MaxHP) * 100);
+        Debug.Log("Value : " + value);
+        if (value >= 60) _phaseData.CurrentPhase = 1;
+        else if (value >= 25) _phaseData.CurrentPhase = 2; 
+        else if (value >= 0) _phaseData.CurrentPhase = 3; 
 
         OnHitTriggered?.Invoke();
 

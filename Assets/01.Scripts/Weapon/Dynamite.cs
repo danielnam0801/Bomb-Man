@@ -6,6 +6,7 @@ using UnityEngine;
 public class Dynamite : PoolableMono
 {
     private float bombDelay = 1f;
+    public float BombDelay { get => bombDelay; set { bombDelay = value; } }
     private float positionMoveSpeed;
 
     Vector3[] positions;
@@ -98,18 +99,23 @@ public class Dynamite : PoolableMono
             {
                 if (a != null)
                 {
-                    IDamageable damageable;
-                    if(a.transform.TryGetComponent<IDamageable>(out damageable))
+                    if (!a.CompareTag("Enemy"))
                     {
-                        float distance = Vector3.Distance(transform.position, a.transform.position);
-                        if (distance < bossHitCriRad) Damage *= 2;
-                        else
+                        IDamageable damageable;
+                        if(a.transform.TryGetComponent<IDamageable>(out damageable))
                         {
-                            Damage -= (int)(distance * 10); //∞≈∏Æ∞° ∏’∏∏≈≠ ª©¡‹
-                            Debug.Log("EnemyDamage : " + Damage);
+                            float distance = Vector3.Distance(transform.position, a.transform.position);
+                            if (distance < bossHitCriRad) Damage *= 2;
+                            else
+                            {
+                                Damage -= (int)(distance * 10); //∞≈∏Æ∞° ∏’∏∏≈≠ ª©¡‹
+                                Debug.Log("EnemyDamage : " + Damage);
+                            }
+                            Damage = Mathf.Clamp(Damage, 5, 20);
+                            damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
+                        
+                            
                         }
-                        Damage = Mathf.Clamp(Damage, 5, 20);
-                        damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
                     }
                 }
             }
@@ -135,7 +141,6 @@ public class Dynamite : PoolableMono
     IEnumerator Shooting(float speed)
     {
         ThrowStart?.Invoke();
-        
         for (int i = 0; i < positions.Length - 2; i++)
         {
             if (isHit) break;
@@ -144,7 +149,7 @@ public class Dynamite : PoolableMono
         }
     
         FallEnd?.Invoke();
-        yield return new WaitForSeconds(bombDelay);
+        yield return new WaitForSeconds(BombDelay);
 
         BombAct?.Invoke();
     }

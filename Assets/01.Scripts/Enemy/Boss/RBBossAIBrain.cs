@@ -38,12 +38,15 @@ public class RBBossAIBrain : MonoBehaviour
     [SerializeField] private float JumpCool = 3f;    
     [SerializeField] private float singleShootCool = 5f;    
     [SerializeField] private float burstShootCool = 5f;    
-    [SerializeField] private float autoShootCool = 5f;    
+    [SerializeField] private float autoShootCool = 5f;
+    [SerializeField] private float minCool = 5f;
+    [SerializeField] private float maxCool = 60f;
 
     [Tooltip("공격사이에 공격간격두기")]
     [Header("AttackTerm")]
     public bool isUseAttackTerm = false;
     [SerializeField] private float attackTerm = 4f;
+    private float currentTermTime = 0f;
 
     Queue<EnemyAttackData> attackQueue;
 
@@ -100,22 +103,6 @@ public class RBBossAIBrain : MonoBehaviour
         attackQueue.Enqueue(jumpAttack);
         _attackDictionary.Add(jumpAttack.attackName, jumpAttack);
        
-        EnemyAttackData singleShootAttack = new EnemyAttackData()
-        {
-            atk = atkTrm.GetComponent<RBBossSingleAttack>(),
-            attackName = AttackType.SingleShoot,
-            action = () =>
-            {
-                actionData.IsAttacking = false;
-                bossInfo.IsSingleShooting = false;
-                _canAttackList[AttackType.SingleShoot] = true;
-                SetCoolDown(AttackType.SingleShoot, singleShootCool);
-            },
-            coolTime = singleShootCool,
-        };
-        attackQueue.Enqueue(singleShootAttack);
-        _attackDictionary.Add(singleShootAttack.attackName, singleShootAttack);
-
 
         EnemyAttackData burstShootAttack = new EnemyAttackData()
         {
@@ -148,7 +135,23 @@ public class RBBossAIBrain : MonoBehaviour
             coolTime = autoShootCool,
         };
 
-        attackQueue.Enqueue(autoShootAttack);
+        EnemyAttackData singleShootAttack = new EnemyAttackData()
+        {
+            atk = atkTrm.GetComponent<RBBossSingleAttack>(),
+            attackName = AttackType.SingleShoot,
+            action = () =>
+            {
+                actionData.IsAttacking = false;
+                bossInfo.IsSingleShooting = false;
+                _canAttackList[AttackType.SingleShoot] = true;
+                SetCoolDown(AttackType.SingleShoot, singleShootCool);
+            },
+            coolTime = singleShootCool,
+        };
+        attackQueue.Enqueue(singleShootAttack);
+        _attackDictionary.Add(singleShootAttack.attackName, singleShootAttack);
+
+        //attackQueue.Enqueue(autoShootAttack);
         _attackDictionary.Add(autoShootAttack.attackName, autoShootAttack);
       
         foreach (var skill in _attackDictionary.Values)
@@ -231,10 +234,59 @@ public class RBBossAIBrain : MonoBehaviour
         return _attackDictionary[key].atk;
     }
 
+    float termTimeInterval = 0f; 
     public bool CheckAttack(AttackType key)
     {
-        return bossInfo.CanAttack == true && _canAttackList[key] == true
-            && isCoolDown(key) == true;
+        if( bossInfo.CanAttack == true && _canAttackList[key] == true &&
+            isCoolDown(key) == true && attackQueue.Peek() == _attackDictionary[key])
+        {
+            termTimeInterval = 0f;
+            currentTermTime = Time.time;
+            return true;
+        }
+        else
+        {
+            termTimeInterval = Time.time - currentTermTime;
+            if (termTimeInterval >= attackTerm)
+            {
+                GotoEndQueue();
+                currentTermTime = Time.time;
+            }
+            return false;
+        }
+    }
+
+    [SerializeField] private float PhaseTwoCoolDownValue = 5f, PhaseThreeCoolDownValue = 10f;
+    public void PhaseCoolDownCheck()
+    {
+        Debug.Log("PhaseChange");
+        if(bossInfo.CurrentPhase == 2)
+        {
+            attackTerm = attackTerm/2 + 1;
+            ALLCoolTimeDown(PhaseTwoCoolDownValue);
+        }
+        if(bossInfo.CurrentPhase == 3)
+        {
+            attackTerm = attackTerm/2 + 1;
+            ALLCoolTimeDown(PhaseThreeCoolDownValue);
+        }
+    }
+
+    private void ALLCoolTimeDown(float downValue)
+    {
+        foreach(var a in _attackDictionary)
+        {
+            float coolTime = Mathf.Clamp(a.Value.coolTime - downValue, minCool, maxCool);
+            SetCoolDown(a.Key, coolTime);
+        }
+    }
+
+    public void ALLCoolTimeReset()
+    {
+        foreach (var a in _attackDictionary)
+        {
+            SetCoolDown(a.Key, a.Value.coolTime);
+        }
     }
 
     public void CallEndAct(AttackType key)
@@ -248,5 +300,7 @@ public class RBBossAIBrain : MonoBehaviour
         attackQueue.Dequeue();
         attackQueue.Enqueue(temp); // 
     }
+
+
 
 }
