@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PoolingListSO _poolingList;
   
-    public VisualTreeAsset _intro, _loading, _fight;
-
     public bool IsIntroScene = true;
     public bool IsLoadingScene = false;
     public bool IsFightScene = false;
@@ -55,14 +53,14 @@ public class GameManager : MonoBehaviour
 
         CreatePool();
         CreateTimeController();
-        CreateUIManager();
         CreateBombManager();
+        CreateUIManagers();
         CreateVFXManager();
 
         DontDestroyOnLoad(this);
     }
 
-    private void FightSceneInit()
+    public void FightSceneInit()
     {
         CreatePlayerManager();
     }
@@ -83,6 +81,12 @@ public class GameManager : MonoBehaviour
         VFXManager.Instance = gameObject.AddComponent<VFXManager>();
     }
 
+    private void CreateUIManagers()
+    {
+        Transform a = transform.Find("UIManager");
+        UIManager.Instance = a.gameObject.AddComponent<UIManager>();
+    }
+
     private void CreatePool()
     {
         PoolManager.Instance = new PoolManager(transform);
@@ -95,12 +99,6 @@ public class GameManager : MonoBehaviour
     private void CreateTimeController()
     {
         TimeController.Instance = gameObject.AddComponent<TimeController>();
-    }
-
-    private void CreateUIManager()
-    {
-        UIDocument uidocument = FindObjectOfType<UIDocument>();
-        UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
     }
 
     public void LoadScene(string name)

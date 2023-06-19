@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 public class MainUI : MonoBehaviour
 {
     private UIDocument _uiDocument;
+    private EnemyHPBar _enemyBar;
+    private EnemyHealth _subscribedEnemy = null;
 
     private void Awake()
     {
@@ -14,22 +16,36 @@ public class MainUI : MonoBehaviour
 
     private void OnEnable()
     {
-        VisualElement root = _uiDocument.rootVisualElement;
-        Button popupBtn = root.Q<Button>("myPopupBtn");
+       
+    }
 
-        VisualElement popup = root.Q<VisualElement>("popupWindow");
+    public void Subscribe(EnemyHealth health)
+    {
+        _enemyBar.ShowBar(true);
 
-        popupBtn.RegisterCallback<ClickEvent>(e =>
+        if (_subscribedEnemy != health)
         {
-            Time.timeScale = 0;
-            popup.AddToClassList("on"); //클래스에 on을 붙여준다.
-        });
+            if (_subscribedEnemy != null)
+            {
+                _subscribedEnemy.OnHealthChanged -= UpdateEnemyHPData;
+            }
 
-        Button closeBtn = root.Q<Button>("closeBtn");
-        closeBtn.RegisterCallback<ClickEvent>(e =>
-        {
-            Time.timeScale = 1;
-            popup.RemoveFromClassList("on");
-        });
+            _subscribedEnemy = health;
+            _subscribedEnemy.OnHealthChanged += UpdateEnemyHPData;
+
+            _enemyBar.EnemyName = health.gameObject.name;
+            _enemyBar.MaxHP = _subscribedEnemy.MaxHP;
+        }
+    }
+
+    private void FightUI(VisualElement root)
+    {
+        VisualElement _hpBarRoot = root.Q<VisualElement>("BarRect");
+        _enemyBar = new EnemyHPBar(_hpBarRoot);
+    }
+
+    private void UpdateEnemyHPData(int current, int max)
+    {
+        _enemyBar.HP = current;
     }
 }
