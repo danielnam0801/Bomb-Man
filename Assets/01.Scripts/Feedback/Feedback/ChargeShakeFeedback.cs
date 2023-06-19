@@ -7,14 +7,13 @@ public class ChargeShakeFeedback : MonoBehaviour
 {
     private CinemachineBasicMultiChannelPerlin _noise;
 
-    private void OnEnable()
-    {
-        if (Core.DefineEtc.VCam == null) Debug.LogError("ShakeFeedback에 Vcam없음");
-        _noise = Core.DefineEtc.VCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-    }
-
     public void SetShake(float _amplitude, float _intensity)
     {
+
+        if (Core.DefineEtc.VCam == null) Debug.LogError("ShakeFeedback에 Vcam없음");
+        if(_noise == null)
+            _noise = Core.DefineEtc.VCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
         _noise.m_AmplitudeGain = _amplitude;
         _noise.m_FrequencyGain = _intensity;
     }

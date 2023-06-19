@@ -13,7 +13,8 @@ public class UtilMono : MonoBehaviour
         {
             Debug.LogError("Multiple UtilMono is running");
         }
-        Instance = this;
+        if(Instance == null)
+            Instance = this;
     }
 
     public void AddDelayCoroutine(Action Callback, float time)

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private PoolingListSO _poolingList;
-      
-    public LayerMask whatIsGround;
+  
+    public VisualTreeAsset _intro, _loading, _fight;
+
+    public bool IsIntroScene = true;
+    public bool IsLoadingScene = false;
+    public bool IsFightScene = false;
 
     private Transform _playerTrm;
     public Transform PlayerTrm
@@ -52,9 +57,16 @@ public class GameManager : MonoBehaviour
         CreateTimeController();
         CreateUIManager();
         CreateBombManager();
-        CreatePlayerManager();
         CreateVFXManager();
+
+        DontDestroyOnLoad(this);
     }
+
+    private void FightSceneInit()
+    {
+        CreatePlayerManager();
+    }
+
 
     private void CreateBombManager()
     {
@@ -87,8 +99,13 @@ public class GameManager : MonoBehaviour
 
     private void CreateUIManager()
     {
-        //UIDocument uidocument = FindObjectOfType<UIDocument>();
-        //UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
+        UIDocument uidocument = FindObjectOfType<UIDocument>();
+        UIManager.Instance = uidocument.gameObject.AddComponent<UIManager>();
+    }
+
+    public void LoadScene(string name)
+    {
+        SceneManager.LoadScene(name);
     }
 
     public Vector3 ReturnVector3PosXZ(Vector3 pos)
@@ -109,6 +126,7 @@ public class GameManager : MonoBehaviour
         }
         
     }
+
     #region 디버그 모드
 
     [SerializeField]
