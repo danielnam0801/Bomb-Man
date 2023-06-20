@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -12,16 +13,38 @@ public class PlayerManager : MonoBehaviour
     ActionData actionData;
     public ActionData ActionData => actionData;
 
+    Transform unitParent;
+    MainUI mainUI;
+    Transform boss;
+
     private void OnEnable()
     {
-        Init();
+        StartCoroutine("InitWait", 0.2f);
     }
 
     void Init()
     {
-        if(agentController == null)
-            agentController = GameManager.Instance.PlayerTrm.GetComponent<AgentController>();
-        if(actionData == null)
-            actionData = GameManager.Instance.PlayerTrm.GetComponent<ActionData>();
+        mainUI = GameObject.Find("MainUI").GetComponent<MainUI>();
+        unitParent = GameObject.Find("UnitParent").transform;
+        unitParent.Find("Player").gameObject.SetActive(true);
+        
+        boss = unitParent.Find("BossRobot").transform;
+        boss.gameObject.SetActive(true);
+
+        if (agentController == null)
+            agentController = unitParent.Find("Player").transform.GetComponent<AgentController>();
+        if (actionData == null)
+            actionData = unitParent.Find("Player").transform.GetComponent<ActionData>();
+    }
+
+    public void FindPlayer()
+    {
+        mainUI.Subscribe(boss.GetComponent<EnemyHealth>());
+    }
+
+    IEnumerator InitWait(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Init();
     }
 }

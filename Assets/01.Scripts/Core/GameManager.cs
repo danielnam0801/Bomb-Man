@@ -22,9 +22,12 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (_playerTrm == null)
+            if (IsFightScene)
             {
-                _playerTrm = GameObject.FindGameObjectWithTag("Player").transform;
+                if (_playerTrm == null)
+                {
+                    _playerTrm = GameObject.FindGameObjectWithTag("Player").transform;
+                }
             }
             return _playerTrm;
         }
@@ -35,9 +38,12 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if(_playerOriginTrm == null)
+            if (IsFightScene)
             {
-                _playerOriginTrm = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerPoint").transform;
+                if(_playerOriginTrm == null)
+                {
+                    _playerOriginTrm = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerPoint").transform;
+                }
             }
             return _playerOriginTrm;
         }
@@ -47,8 +53,11 @@ public class GameManager : MonoBehaviour
     {
         if(Instance != null)
         {
+            Destroy(this.gameObject);
+            return;
             Debug.LogError("Multiple GameManager is running");
         }
+        
         Instance = this;
 
         CreatePool();
@@ -75,6 +84,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerManager.Instance = gameObject.AddComponent<PlayerManager>();
     }
+
 
     private void CreateVFXManager()
     {
@@ -123,6 +133,15 @@ public class GameManager : MonoBehaviour
             return PlayerOriginTrm.position;
         }
         
+    }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
     }
 
     #region 디버그 모드

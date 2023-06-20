@@ -29,6 +29,11 @@ public class AgentHealth : MonoBehaviour, IDamageable
         _currentHealth = Mathf.Clamp(_currentHealth + value, 0, _healthAndArmor.MaxHP);
     }
 
+    public void DeadProcess()
+    {
+        UIManager.Instance.CurrentUI.GetComponent<MainUI>().PlayerDieEvent();
+    }
+
     public void OnDamage(int damage, Vector3 point, Vector3 normal)
     {
         if (_agentController.IsDead) return; //»ç¸Á½Ã ÁßÁö

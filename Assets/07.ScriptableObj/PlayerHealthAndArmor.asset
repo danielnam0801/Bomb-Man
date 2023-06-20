@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adf9d559a6a0fc345bab08cb5b327c1a, type: 3}
   m_Name: PlayerHealthAndArmor
   m_EditorClassIdentifier: 
-  MaxHP: 100
+  MaxHP: 1
   ArmorValue: 0.1

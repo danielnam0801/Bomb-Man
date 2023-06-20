@@ -8,6 +8,7 @@ public class IntroUI : MonoBehaviour
     UIDocument document;
     [SerializeField]
     VisualTreeAsset visualTreeAsset;
+
     private void Awake()
     {
         document = GetComponent<UIDocument>();
@@ -21,15 +22,19 @@ public class IntroUI : MonoBehaviour
     private void Intro(VisualElement _root)
     {
         VisualElement _startBtn, _creditBtn, _exitBtn, fadePanel, clickFadePanel;
+        VisualElement creditPanel, _creditExitBtn; 
         List<VisualElement> btnList = new List<VisualElement>();
 
         _startBtn = _root.Q<VisualElement>("StartBtn");
-        _creditBtn = _root.Q<VisualElement>("CreditBtn");
         _exitBtn = _root.Q<VisualElement>("ExitBtn");
+        _creditBtn = _root.Q<VisualElement>("CreditBtn");
+      
         fadePanel = _root.Q<VisualElement>("FadePanel");      
         clickFadePanel = _root.Q<VisualElement>("ClickFadePanel");
-      
 
+        _creditExitBtn = _root.Q<VisualElement>("CreditEndBtn");
+        creditPanel = _root.Q<VisualElement>("CreditPanel");
+        
         btnList.Add(_startBtn);
         btnList.Add(_creditBtn);
         btnList.Add(_exitBtn);
@@ -39,18 +44,27 @@ public class IntroUI : MonoBehaviour
         _startBtn.RegisterCallback<ClickEvent>((t) =>
         {
             Debug.Log("CLicked");
-            StartCoroutine(BtnClickEvent(btnList, clickFadePanel));
+            StartCoroutine(BtnClickEvent(btnList, clickFadePanel, fadePanel, _root));
             isClick = true;
         });
 
         _creditBtn.RegisterCallback<ClickEvent>((t) =>
         {
-            ShowCreditScreen();
+            creditPanel.AddToClassList("on");
+            isClick = true;
+
+            _creditExitBtn.RegisterCallback<ClickEvent>((t) =>
+            {
+                creditPanel.RemoveFromClassList("on");
+                fadePanel.RemoveFromClassList("on");
+                isClick = false;
+            });
         });
 
         _exitBtn.RegisterCallback<ClickEvent>((t) =>
         {
-            ExitGame();
+            GameManager.Instance.ExitGame();
+            isClick = true;
         });
 
         #region fadePanel
@@ -91,7 +105,7 @@ public class IntroUI : MonoBehaviour
         document.visualTreeAsset = visualTreeAsset;
     }
 
-    private void ChangeSceneInit()
+    private void ChangeToBossSceneInit()
     {
         GameManager.Instance.FightSceneInit();
 
@@ -102,43 +116,48 @@ public class IntroUI : MonoBehaviour
         GameManager.Instance.LoadScene("BossScene");
     }
 
-
-
-    private void ShowCreditScreen()
+    IEnumerator BtnClickEvent(List<VisualElement> btnList, VisualElement clickPanel, VisualElement fadePanel, VisualElement root)
     {
-
-    }
-
-    public void ExitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit(); // 어플리케이션 종료
-#endif
-    }
-
-    IEnumerator BtnClickEvent(List<VisualElement> btnList, VisualElement clickPanel)
-    {
+       
         foreach (var btn in btnList)
         {
             btn.AddToClassList("BtnClick");
             yield return new WaitForSeconds(0.3f);
         }
         yield return new WaitForSeconds(1f);
+
+        bool isStart = true;
         clickPanel.AddToClassList("start");
         clickPanel.RegisterCallback<TransitionEndEvent>((t) =>
         {
-            ChangeSceneInit();
-            //UtilMono.Instance.AddDelayCoroutine(ChangeSceneInit, 0.2f);
+            if (isStart)
+            {
+                isStart = false;
+                Debug.Log("TransitionEndEventMultiple!!");
+                VisualElement leftPanel = root.Q<VisualElement>("LeftPanel");
+                leftPanel.AddToClassList("LeftPanelEnd");
+                ChangeToBossSceneInit();
+            }
         });
         yield return new WaitForSeconds(2f);
+        fadePanel.RemoveFromClassList("on");
+        bool panelEnd = false;
         clickPanel.AddToClassList("end");
         clickPanel.RegisterCallback<TransitionEndEvent>((t) =>
         {
-            UIManager.Instance.UseIntroUI = false;
-            VisualElementInit();
+            if (!isStart)
+            {
+                VisualElement upPanel = root.Q<VisualElement>("UpPanel");
+                VisualElement downPanel = root.Q<VisualElement>("DownPanel");
+                panelEnd = true;
+                upPanel.AddToClassList("PanelEnd");
+                downPanel.AddToClassList("PanelEnd2");
+                isStart = true;
+            }
         });
+        yield return new WaitUntil(()=> panelEnd);
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.UseIntroUI = false;
+        VisualElementInit();
     }
-
 }

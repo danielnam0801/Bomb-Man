@@ -17,4 +17,13 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="DeadUI" picking-mode="Ignore" class="DeadUI">
+        <ui:VisualElement style="width: 100%; height: 50%; background-color: rgba(0, 0, 0, 0.39); align-items: center; justify-content: center;">
+            <ui:Label text="Die" display-tooltip-when-elided="true" style="font-size: 150px; color: rgb(154, 0, 0); top: 20px;" />
+            <ui:VisualElement style="width: 40%; height: 20%; top: 100px; align-items: center; justify-content: space-around; flex-direction: row;">
+                <ui:Button text="Intro" display-tooltip-when-elided="true" name="IntroBtn" class="Button" />
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitBtn" class="Button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

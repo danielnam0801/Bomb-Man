@@ -85,3 +85,70 @@
     position: absolute;
     left: -2500px;
 }
+
+.PanelEnd {
+    bottom: 300px;
+    transition-duration: 2s;
+}
+
+.PanelEnd2 {
+    top: 300px;
+    transition-duration: 2s;
+}
+
+.LeftPanelEnd {
+    right: 500px;
+}
+
+.CreditPanel {
+    position: absolute;
+    width: 700px;
+    height: 65%;
+    left: 600px;
+    top: -1000px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.52);
+    -unity-text-align: middle-center;
+    transition-timing-function: ease-in-back;
+    transition-duration: 0.4s;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.CreditPanel.on {
+    top: 200px;
+    transition-timing-function: ease-out-bounce;
+    transition-duration: 1s;
+}
+
+.creditEndBtn {
+    left: 300px;
+    top: 220px;
+    width: 60px;
+    height: 60px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: rgb(0, 0, 0);
+    background-image: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=3316425174430470091&guid=05d59ea048ea88d4696a9d91df96e3f7&type=3#arrow-up@2x');
+}
+
+.creditEndBtn:hover {
+    transition-duration: 0.5s;
+    -unity-background-image-tint-color: rgba(255, 0, 0, 255);
+}

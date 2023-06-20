@@ -106,6 +106,11 @@ public class BossController : PoolableMono
             }, 1f);
         });
     }
+        
+    public void ShowDeadUI()
+    {
+        UIManager.Instance.CurrentUI.GetComponent<MainUI>().BossDieEvent();
+    }
 
     public override void Init()
     {

@@ -12,6 +12,8 @@ public class UtilMono : MonoBehaviour
         if(Instance != null)
         {
             Debug.LogError("Multiple UtilMono is running");
+            Destroy(this.gameObject);
+            return;
         }
         if(Instance == null)
             Instance = this;

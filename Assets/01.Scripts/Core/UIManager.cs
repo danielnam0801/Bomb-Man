@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
 
     private bool useIntroUi = true;
     private bool useFightUI = false;
+
+    public GameObject CurrentUI { get; private set; }
     public bool UseIntroUI {
         get { return useIntroUi; }
         set
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour
                 useIntroUi = true;
                 string intro = "IntroUI";
                 uis[intro].SetActive(true);
+                CurrentUI = uis[intro];
             }
             else
             {
@@ -29,6 +32,7 @@ public class UIManager : MonoBehaviour
             }
         } 
     }
+
     public bool UseFightUI
     {
         get { return useFightUI; }
@@ -39,6 +43,7 @@ public class UIManager : MonoBehaviour
                 useFightUI = true;
                 string fight = "MainUI";
                 uis[fight].SetActive(true);
+                CurrentUI = uis[fight];
             }
             else
             {
@@ -47,6 +52,15 @@ public class UIManager : MonoBehaviour
                 uis[fight].SetActive(false);
             }
         }
+    }
+
+    public void GoIntro()
+    {
+        GameManager.Instance.IsIntroScene = true;
+        GameManager.Instance.IsFightScene = false;
+        UseFightUI = false;
+        UseIntroUI = true;
+        GameManager.Instance.LoadScene("IntroScene");
     }
 
     private void Awake()
