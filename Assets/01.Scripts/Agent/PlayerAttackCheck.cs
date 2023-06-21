@@ -20,6 +20,8 @@ public class PlayerAttackCheck : MonoBehaviour
     float minScrollValue = -2f;
     float maxScrollValue = 2f;
 
+    float attackCooltime = 0.75f;
+    bool canAttack = true;
     private void Awake()
     {
         _agentInput = GetComponent<AgentInput>();
@@ -33,8 +35,15 @@ public class PlayerAttackCheck : MonoBehaviour
         _actionData.PointCnt = RenderPositionMaxCnt;
     }
 
+
+    float t = 0f;
     private void Update()
     {
+        if (t > attackCooltime)
+        {
+            t = 0;
+            canAttack = true;
+        }
         if (_actionData.CanCheckAttack)
         {
             if (Input.mouseScrollDelta.y != 0)
@@ -53,7 +62,11 @@ public class PlayerAttackCheck : MonoBehaviour
             else if (Input.GetMouseButtonUp(0))
             {
                 //Debug.Log("InputUp");
-                _agentInput.SetPlayAttackHandle();
+                if (canAttack)
+                {
+                    canAttack = false;
+                    _agentInput.SetPlayAttackHandle();
+                }
             }
             else
             {
@@ -61,6 +74,7 @@ public class PlayerAttackCheck : MonoBehaviour
                 _targetPointCircle.gameObject.SetActive(false);
             }
         }
+        t += Time.deltaTime;
     }
 
     private void DrawTrajectory()

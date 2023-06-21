@@ -24,7 +24,8 @@ public class Dynamite : PoolableMono
 
     [SerializeField] EffectPlayer bombEffect;
 
-    float playerBombRad = 1f, bossBombRad = 1.5f, bossHitCriRad = 0.7f; float playerHitCriRad = 0.3f;
+    float playerBombRad = 1f, bossBombRad = 1.5f, bossHitCriRad = 1.3f;
+    float fontSize;
 
     public int Damage { get; set; }
 
@@ -46,17 +47,6 @@ public class Dynamite : PoolableMono
 
     private void Explode()
     {
-        //Collider[] colliders = Physics.OverlapSphere(transform.position, radius: 8f);
-
-        //foreach(Collider nearby in colliders)
-        //{
-        //    Rigidbody rigg = nearby.GetComponent<Rigidbody>();
-        //    if(rigg != null)
-        //    {
-        //        rigg.AddExplosionForce(4000f, transform.position, 8f);
-        //    }
-        //}
-
         if (!isEnemyBomb)
         {
             float radius = PlayerManager.Instance.
@@ -66,55 +56,59 @@ public class Dynamite : PoolableMono
 
             foreach (var a in playerBomb)
             {
-                if (a.gameObject.CompareTag("Player"))
+                if (a != null)
                 {
-                    PlayerManager.Instance.ActionData.JumpCall = true;
-                    PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
-                }
-                else // ÀûÃ¼Å©
-                {
-                    if (a != null)
+                    if (a.gameObject.CompareTag("Player"))
                     {
+                        PlayerManager.Instance.ActionData.JumpCall = true;
+                        PlayerManager.Instance.ActionData.DynaBombPoint = transform.position;
+                    }
+                    else if(a.gameObject.CompareTag("Enemy"))
+                    {
+                        int fontSize = 10;
+                        Color fontColor = Color.white;
+
                         IDamageable damageable;
                         if (a.transform.TryGetComponent<IDamageable>(out damageable))
                         {
                             float distance = Vector3.Distance(transform.position, a.transform.position);
-                            if (distance < bossHitCriRad) Damage *= 2;
+                            if (distance < bossHitCriRad)
+                            {
+                                Damage = Damage * 2;
+                                fontSize = 15;
+                                fontColor = Color.red;
+                            }
                             else
                             {
-                                Damage -= (int)(distance * 5); //°Å¸®°¡ ¸Õ¸¸Å­ »©ÁÜ
+                                Damage -= (int)(2 * (distance - bossHitCriRad));
+                                fontSize = 10;
+                                fontColor = Color.white;
                             }
-                            Damage = Mathf.Clamp(Damage, 5, 20);
-                            Debug.Log("PlayerDamage : " + Damage);
                             damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
                         }
+
+                        PopupText text = PoolManager.Instance.Pop("PopupText") as PopupText;
+                        text.StartPopup(text: Damage.ToString(), pos: transform.position + new Vector3(0, 0.5f),
+                                        fontSize: fontSize, color: fontColor);
                     }
                 }
             }
         }
         else { // ÀûÀÌ ½ð ÆøÅºÀÏ¶§
-            float radius = this.playerBombRad;
+            float radius = this.bossBombRad;
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
             foreach(var a in colliders)
             {
                 if (a != null)
                 {
-                    if (!a.CompareTag("Enemy"))
+                    if (a.CompareTag("Player"))
                     {
                         IDamageable damageable;
                         if(a.transform.TryGetComponent<IDamageable>(out damageable))
                         {
                             float distance = Vector3.Distance(transform.position, a.transform.position);
-                            if (distance < bossHitCriRad) Damage *= 2;
-                            else
-                            {
-                                Damage -= (int)(distance * 10); //°Å¸®°¡ ¸Õ¸¸Å­ »©ÁÜ
-                                Debug.Log("EnemyDamage : " + Damage);
-                            }
-                            Damage = Mathf.Clamp(Damage, 5, 20);
+                            Damage = (int)((float)Damage / distance);
                             damageable.OnDamage(Damage, a.transform.position, transform.position - a.transform.position);
-                        
-                            
                         }
                     }
                 }
@@ -172,5 +166,11 @@ public class Dynamite : PoolableMono
     private void OnTriggerEnter(Collider other)
     {
         //BombAct?.Invoke();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(transform.position, bossBombRad);
+        Gizmos.DrawSphere(transform.position, bossHitCriRad);
     }
 }

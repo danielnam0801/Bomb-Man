@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class EnemyHPBar
+public class PlayerHealthBar
 {
     private VisualElement _barRect;
     private VisualElement _bar;
     private Label _hpLabel;
-    private Label _nameLabel;
 
     private int _currentHP;
     public int HP
@@ -29,27 +28,19 @@ public class EnemyHPBar
         }
     }
 
-    public string EnemyName
-    {
-        set
-        {
-            _nameLabel.text = $"{value}";
-        }
-    }
-
     private void UpdateHPText()
     {
+        Debug.Log("Bar: " + _bar);
+        Debug.Log("CurrentHP : "+ _currentHP);
         _bar.transform.scale = new Vector3((float)_currentHP / _maxHP, 1, 0);
         _hpLabel.text = $"{_currentHP} / {_maxHP}";
     }
 
-    public EnemyHPBar(VisualElement bar)
+    public PlayerHealthBar(VisualElement bar)
     {
         _barRect = bar;
-        Debug.Log("EnemyBarRect: " + _barRect);
         _bar = bar.Q<VisualElement>("Bar");
         _hpLabel = bar.Q<Label>("HPLabel");
-        _nameLabel = bar.Q<Label>("NameLabel");
     }
 
     public void ShowBar(bool value)

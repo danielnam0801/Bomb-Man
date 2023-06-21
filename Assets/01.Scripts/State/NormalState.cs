@@ -7,7 +7,6 @@ public class NormalState : CommonState
         _agentMovement.StopImmediately();
         _agentInput.OnMovementKeyPress += OnMovementHandle; //들어올 때 키입력 구독
         _agentInput.OnAttackKeyPress += OnAttackHandle;
-        _agentInput.OnJumpKeyPress += OnJumpingHandle;
 
         _agentMovement.IsActiveMove = true;
     }
@@ -17,7 +16,6 @@ public class NormalState : CommonState
         _agentMovement.StopImmediately();
         _agentInput.OnMovementKeyPress -= OnMovementHandle; //나갈때 키입력 구독해제
         _agentInput.OnAttackKeyPress -= OnAttackHandle;
-        _agentInput.OnJumpKeyPress -= OnJumpingHandle;
 
         _agentMovement.IsActiveMove = false;
     }

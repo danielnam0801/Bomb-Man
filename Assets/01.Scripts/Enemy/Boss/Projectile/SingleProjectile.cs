@@ -52,7 +52,7 @@ public class SingleProjectile : Projectile
         dir = _bossShootAttack.transform.forward;
         dir.y -= 0.3f;
         //dir = GameManager.Instance.PlayerOriginTrm.position - transform.position;
-        FireBeam(bulletData.damage, dir);
+        StartCoroutine(FireBeam(bulletData.damage, dir));
     }
 
     public void Charge(float time)
@@ -79,40 +79,41 @@ public class SingleProjectile : Projectile
         dir.y = 0;
     }
     
-    public void FireBeam(int damage, Vector3 targetDir)
+    IEnumerator FireBeam(int damage, Vector3 targetDir)
     {
-        _beamLength = Core.Define.MAPZSIZE;
-        float r = _lineRenderer.startWidth;
-        RaycastHit hit;
-        //일단 레이어마스크는 쓰지 않고 쏜다.
-        bool isHit = Physics.SphereCast(
-            transform.position, r, targetDir.normalized, out hit, _beamLength, WhatIsEnemy);
-        _lineRenderer.enabled = true;
-        _lineRenderer.SetPosition(0, transform.position + targetDir.normalized * 0.5f); //빔의 시작점을 현재 위치로 설정
-        if (isHit) //뭔가에 맞았다면.
+        float t = 0; 
+
+        while(t < _beamTime)
         {
-            Debug.Log("맞음 : " + hit.collider.name);
-            if (hit.collider.TryGetComponent<IDamageable>(out IDamageable health))
+            _lineRenderer.SetPosition(0, transform.position + targetDir.normalized * 0.5f); //빔의 시작점을 현재 위치로 설정
+            Vector3 endPos = transform.position + targetDir * _beamLength;
+            _lineRenderer.enabled = true;
+            _lineRenderer.SetPosition(1, endPos);
+            
+            _beamLength = Core.Define.MAPZSIZE;
+            
+            float r = _lineRenderer.startWidth - 0.1f;
+            RaycastHit hit;
+            bool isHit = Physics.SphereCast(
+                transform.position, r, targetDir.normalized, out hit, _beamLength, WhatIsEnemy);
+            if (isHit)
             {
-                health.OnDamage(damage, hit.point, hit.normal);
+                Debug.Log("맞음 : " + hit.collider.name);
+                if (hit.collider.TryGetComponent<IDamageable>(out IDamageable health))
+                {
+                    health.OnDamage(damage, hit.point, hit.normal);
+                }
             }
+            t += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        Vector3 endPos = transform.position + targetDir * _beamLength;
-        _lineRenderer.SetPosition(1, endPos);
-
-        StartCoroutine(DelayStop());
+        StopBeam();
     }
 
     public void StopBeam()
     {
         StartCoroutine(StopSequence());
-    }
-
-    private IEnumerator DelayStop()
-    {
-        yield return new WaitForSeconds(_beamTime);
-        StopBeam();
     }
 
     private IEnumerator StopSequence()

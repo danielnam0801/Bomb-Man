@@ -20,6 +20,12 @@ public class AgentInput : MonoBehaviour
     void Update()
     {
         UpdateMoveInput();
+        UpdateCameraInput();
+    }
+
+    private void UpdateCameraInput()
+    {
+        if(Input.GetKeyDown(KeyCode.Q)) GameManager.Instance.ChangeCameraModeToOrthographic();
     }
 
     public void SetPlayAttackHandle()

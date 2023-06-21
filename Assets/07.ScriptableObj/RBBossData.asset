@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9603e34e3ebdc4f47a5120feb1398b8c, type: 3}
   m_Name: RBBossData
   m_EditorClassIdentifier: 
-  MaxHP: 3
+  MaxHP: 1
   MoveSpeed: 1
   RotateSpeed: 360
   AtkDamage: 5

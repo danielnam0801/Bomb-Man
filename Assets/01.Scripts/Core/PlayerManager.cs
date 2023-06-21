@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
     Transform unitParent;
     MainUI mainUI;
     Transform boss;
+    Transform player;
 
     private void OnEnable()
     {
@@ -29,6 +30,7 @@ public class PlayerManager : MonoBehaviour
         unitParent.Find("Player").gameObject.SetActive(true);
         
         boss = unitParent.Find("BossRobot").transform;
+        player = unitParent.Find("Player").transform;
         boss.gameObject.SetActive(true);
 
         if (agentController == null)
@@ -39,7 +41,7 @@ public class PlayerManager : MonoBehaviour
 
     public void FindPlayer()
     {
-        mainUI.Subscribe(boss.GetComponent<EnemyHealth>());
+        mainUI.Subscribe(boss.GetComponent<EnemyHealth>(), player.GetComponent<AgentHealth>());
     }
 
     IEnumerator InitWait(float waitTime)

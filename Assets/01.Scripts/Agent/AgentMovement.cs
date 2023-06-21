@@ -18,6 +18,8 @@ public class AgentMovement : MonoBehaviour
     Rigidbody rb;
 
     [SerializeField] Transform GroundPos;
+    [SerializeField] Transform GroundCheckPos;
+    [SerializeField] LayerMask GroundLayer;
 
     private void Awake()
     {
@@ -37,12 +39,22 @@ public class AgentMovement : MonoBehaviour
         rb.AddForce(jumpPower * dir, ForceMode.Impulse);
     }
 
+    public void SetHitExplosion(int power, Vector3 pos, Vector3 normal)
+    {
+        Debug.Log("ISHIITITIIT");
+        Vector3 normalVec = new Vector3(normal.x, 1f, normal.z);
+        Debug.Log($"normalVec x : {normalVec.x} ,y: {normalVec.y} z: {normalVec.z}");
+
+        rb.AddForce(normalVec, ForceMode.Impulse);
+    }
+
     private void CalculatePlayerMovement()
     {
         _inputVelocity.Normalize();
         
         _movementVelocity = Quaternion.Euler(0, -45f, 0) * _inputVelocity;
 
+        Debug.Log(_movementVelocity.sqrMagnitude);
         _agentAnimator?.SetSpeed(_movementVelocity.sqrMagnitude);
 
         _movementVelocity *= _agentController.CharacterData.MoveSpeed * Time.fixedDeltaTime;
@@ -73,7 +85,7 @@ public class AgentMovement : MonoBehaviour
     private void FixedUpdate()
     {
         IsJumping = PlayerManager.Instance.ActionData.IsJumping;
-
+        PlayerManager.Instance.ActionData.IsGround = Physics.CheckSphere(GroundCheckPos.position, 0.3f, GroundLayer);
         if (transform.position.y < GroundPos.position.y)
             transform.position += new Vector3(0, GroundPos.position.y - transform.position.y, 0);
 

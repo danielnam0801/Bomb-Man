@@ -1,23 +1,40 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/01.Scripts/UIToolkit/MainUI.uss?fileID=7433441132597879392&amp;guid=9d3ffdc42ea8aa74d94992fe933c3f88&amp;type=3#MainUI" />
-    <ui:VisualElement style="flex-direction: row; height: 100%;">
-        <ui:Button text="설정" display-tooltip-when-elided="true" name="myPopupBtn" class="btn" style="position: absolute; right: 20px; top: 20px; -unity-font-definition: url(&apos;project://database/Assets/09.Fonts/neodgmSDFToolkit.asset?fileID=11400000&amp;guid=8b2d4e644b6a67943ba76afcf74705e8&amp;type=2#neodgmSDFToolkit&apos;);" />
+    <ui:VisualElement style="flex-direction: row; height: 100%; overflow: hidden;">
+        <ui:Button text="=" display-tooltip-when-elided="true" name="myPopupBtn" class="btn" style="position: absolute; right: 20px; top: 20px;" />
+        <ui:VisualElement style="width: 20%; height: 100%; top: 0; flex-direction: column-reverse; align-items: center; justify-content: flex-start;">
+            <ui:VisualElement name="PlayerHPBar" style="height: 119px; flex-direction: row; align-items: center; width: 438px; left: 50px; bottom: 39px; background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="HpBarContainer" style="position: absolute; left: 61%; translate: -50% 0; -unity-font: resource(&apos;FlatSkin/Font/Roboto-Black&apos;); bottom: 10px;">
+                    <ui:VisualElement name="BarRectPlayer" class="rect" style="width: 350px; height: 50px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; background-color: rgb(96, 36, 21);">
+                        <ui:VisualElement name="Bar" style="background-color: rgb(156, 16, 11); width: 100%; height: 100%; border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; transform-origin: left; scale: 1 1;" />
+                        <ui:VisualElement name="TextContainer" style="position: absolute; bottom: 0; width: 100%; left: 10px; flex-direction: row; justify-content: space-between; padding-left: 10px; padding-right: 10px; padding-bottom: 5px;">
+                            <ui:Label display-tooltip-when-elided="true" name="NameLabel" class="font" />
+                            <ui:Label text="100 / 100" display-tooltip-when-elided="true" name="HPLabel" class="font" style="top: 0; -unity-font-definition: initial; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=05d59ea048ea88d4696a9d91df96e3f7&amp;type=3#NotInter-Regular&apos;); font-size: 25px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="width: 140px; height: 140px; background-image: none; -unity-background-scale-mode: stretch-to-fill; border-top-left-radius: 200px; border-bottom-left-radius: 200px; border-top-right-radius: 200px; border-bottom-right-radius: 200px; border-left-color: rgba(0, 0, 0, 0.16); border-right-color: rgba(0, 0, 0, 0.16); border-top-color: rgba(0, 0, 0, 0.16); border-bottom-color: rgba(0, 0, 0, 0.16); border-left-width: 12px; border-right-width: 12px; border-top-width: 12px; border-bottom-width: 12px; align-items: center; justify-content: center; overflow: hidden;">
+                    <ui:VisualElement style="background-color: rgb(0, 0, 0); background-image: url(&apos;project://database/Assets/01.Scripts/UIToolkit/2023-06-18.png?fileID=2800000&amp;guid=00829157fd5b6d34a8f6e21783b46e4e&amp;type=3#2023-06-18&apos;); width: 100%; height: 100%; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; -unity-background-scale-mode: scale-and-crop; -unity-slice-left: 3;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="popupWindow">
         <ui:VisualElement name="popup">
-            <ui:Button text="닫기" display-tooltip-when-elided="true" name="closeBtn" class="btn red" style="position: absolute; bottom: 10px; right: 10px;" />
+            <ui:Label text="Puase" display-tooltip-when-elided="true" style="-unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/09_Fonts/Flashback.ttf?fileID=12800000&amp;guid=22b8915bd5371c44682d3f427b774db9&amp;type=3#Flashback&apos;); font-size: 100px; color: rgb(0, 203, 255); top: 0; -unity-text-outline-color: rgb(255, 255, 255); -unity-text-outline-width: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="HpBarContainer" style="position: absolute; left: 50%; top: 20px; translate: -50% 0; -unity-font: resource(&apos;FlatSkin/Font/Roboto-Black&apos;);">
         <ui:VisualElement name="BarRect" class="rect">
-            <ui:VisualElement name="Bar" style="background-color: rgb(37, 119, 128); width: 100%; height: 100%; border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; transform-origin: left;" />
+            <ui:VisualElement name="Bar" style="background-color: rgb(55, 136, 144); width: 100%; height: 100%; border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; transform-origin: left;" />
             <ui:VisualElement name="TextContainer" style="position: absolute; bottom: 10px; width: 100%; left: 10px; flex-direction: row; justify-content: space-between; padding-left: 10px; padding-right: 10px; padding-bottom: 5px;">
                 <ui:Label text="EnemyName" display-tooltip-when-elided="true" name="NameLabel" class="font" />
                 <ui:Label text="100 / 100" display-tooltip-when-elided="true" name="HPLabel" class="font" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="DeadUI" picking-mode="Ignore" class="DeadUI">
+    <ui:VisualElement name="DeadUI" picking-mode="Ignore" class="DeadUI" style="justify-content: space-between;">
+        <ui:VisualElement name="DeadTopPanel" class="updownPanel top" />
         <ui:VisualElement style="width: 100%; height: 50%; background-color: rgba(0, 0, 0, 0.39); align-items: center; justify-content: center;">
             <ui:Label text="Die" display-tooltip-when-elided="true" style="font-size: 150px; color: rgb(154, 0, 0); top: 20px;" />
             <ui:VisualElement style="width: 40%; height: 20%; top: 100px; align-items: center; justify-content: space-around; flex-direction: row;">
@@ -25,5 +42,6 @@
                 <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitBtn" class="Button" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="DeadBottomPanel" class="updownPanel bottom" style="bottom: 0;" />
     </ui:VisualElement>
 </ui:UXML>

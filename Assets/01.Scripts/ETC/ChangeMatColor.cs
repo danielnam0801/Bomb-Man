@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class ChangeMatColor : MonoBehaviour
 {
+    bool shareMaterialTrue = false;
     Renderer m_Renderer;
     Color currentColor;
+    ShareMaterial shareMaterialManager;
+    public Material shareMaterial;
+
+    private void Awake()
+    {
+        TryGetComponent<Renderer>(out m_Renderer);
+        if(TryGetComponent<ShareMaterial>(out shareMaterialManager))
+        {
+            shareMaterialTrue = true;
+        };
+    }
 
     void Start()
     {
-        m_Renderer = GetComponent<Renderer>();
-        Color color = m_Renderer.material.GetColor("_TintColor");
-        currentColor = color;
+        currentColor = shareMaterial.GetColor("_TintColor");
     }
 
     [SerializeField] float colorChangeCool = 5f;
@@ -24,11 +34,13 @@ public class ChangeMatColor : MonoBehaviour
         {
             t = 0;
             canChangeColor = false;
-            Color color = new Color(Random.value, Random.value, Random.value, currentColor.r);
+            Color color = new Color(Random.value, Random.value, Random.value, currentColor.a);
             StartCoroutine(ChangeCor(color));
         }
 
-        t+=Time.deltaTime;
+        if (!shareMaterialTrue)
+            m_Renderer.material.SetColor("_TintColor", currentColor);
+        t +=Time.deltaTime;
     }
     IEnumerator ChangeCor(Color color)
     {
@@ -36,7 +48,10 @@ public class ChangeMatColor : MonoBehaviour
         while (time < lerpTime)
         {
             currentColor = Color.Lerp(currentColor, color, time / lerpTime);
-            m_Renderer.material.SetColor("_TintColor", currentColor);
+            if (shareMaterialTrue)
+            {
+                shareMaterialManager.sharedColor = currentColor;
+            }
             time += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }

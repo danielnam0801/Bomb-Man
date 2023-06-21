@@ -228,9 +228,9 @@ public class RBBossAIBrain : MonoBehaviour
     {
         foreach(var a in _attackDictionary)
         {
-            Debug.Log($"keyName : {key}, {a.Value.attackName}");
+            //Debug.Log($"keyName : {key}, {a.Value.attackName}");
         }
-        Debug.Log($"Key : {key}, {_attackDictionary[key]}");
+        //Debug.Log($"Key : {key}, {_attackDictionary[key]}");
         return _attackDictionary[key].atk;
     }
 

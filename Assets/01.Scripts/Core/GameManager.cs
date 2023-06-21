@@ -49,6 +49,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    bool orthoState = true;
+    public void ChangeCameraModeToOrthographic()
+    {
+        //if (orthoState == value) return;
+
+        orthoState = !orthoState;
+        Camera.main.orthographic = orthoState;
+    }
+
     private void Awake()
     {
         if(Instance != null)
@@ -69,8 +78,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+
     public void FightSceneInit()
     {
+        if(PlayerManager.Instance != null)
+            Destroy(PlayerManager.Instance);
+       
         CreatePlayerManager();
     }
 
@@ -148,23 +161,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private LayerMask _whatIsGround;
-    private void Update()
-    {
-        //if(Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    Ray ray = Define.MainCam.ScreenPointToRay(Input.mousePosition);
-
-        //    RaycastHit hit;
-
-        //    bool result = Physics.Raycast(ray, out hit, Define.MainCam.farClipPlane, 
-        //                _whatIsGround);
-
-        //    if(result)
-        //    {
-        //        EnemyController e = PoolManager.Instance.Pop("HammerEnemy") as EnemyController;
-        //        e.transform.SetPositionAndRotation(hit.point, Quaternion.identity);
-        //    }
-        //}
-    }
+    public LayerMask whatIsGround => _whatIsGround;
+    //private void Update()
+    //{
+    //    if (Input.GetKey(KeyCode.Q))
+    //    {
+    //        ChangeCameraModeToOrthographic(false);
+    //    }
+    //    if(Input.GetKeyUp(KeyCode.Q))
+    //        ChangeCameraModeToOrthographic(true);
+    //}
     #endregion
 }

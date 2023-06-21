@@ -15,8 +15,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public Action<int, int> OnHealthChanged = null;
 
     public bool IsDead { get; set; }
-
-    private int _maxHP;  //이거 SO로 끌어쓰면 되는거 아닌가? 고민
+    
+    private int _maxHP;
     private int _currentHP;
 
     public int MaxHP => _maxHP;
@@ -33,7 +33,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         _currentHP = _maxHP = value;
         IsDead = false;
     }
-
 
     public void OnDamage(int damage, Vector3 point, Vector3 normal)
     {
@@ -60,6 +59,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         //UIManager.Instance.Subscribe(this); //나를 구독해라
         OnHealthChanged?.Invoke(_currentHP, _maxHP); //그리고 전파
+        Debug.Log(OnHealthChanged.Method.Name);
     }
 
 }

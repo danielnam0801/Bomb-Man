@@ -11,6 +11,7 @@ public class RbBossJumpAttack : RbBossAttack
     public UnityEvent JumpEndEvent;
     [SerializeField] EffectPlayer landEffect;
     [SerializeField] Transform alertCircle;
+    float radius = 3.25f;
 
     bool isJumpStart;
     bool isAir;
@@ -128,7 +129,7 @@ public class RbBossJumpAttack : RbBossAttack
         float distanceX = targetPos.x - startPos.x;
         float distanceZ = targetPos.z - startPos.z;
 
-        float yHeight = 0;
+        float yHeight = 2;
         Vector3 cp1 = new Vector3(distanceX / 3, yHeight, distanceZ / 3) + startPos;
         Vector3 cp2 = new Vector3(distanceX / 3 * 3, yHeight, distanceZ / 3 * 3) + startPos;
 
@@ -138,8 +139,12 @@ public class RbBossJumpAttack : RbBossAttack
 
          Vector3[] _bezierPoints = DOCurve.CubicBezier.GetSegmentPointCloud(startPos,
             cp1, targetPos, cp2, 60);
-        _frameSpeed = _jumpSpeed / 60;
+        _frameSpeed = _jumpSpeed / 60f;
 
+        LineRenderer lineRender = GetComponent<LineRenderer>();
+        lineRender.positionCount = _bezierPoints.Length;
+        lineRender.SetPositions(_bezierPoints);
+        
         for(int i = 0; i < _bezierPoints.Length; i++) //일단 절반만 점프
         {
             yield return new WaitForSeconds(_frameSpeed);
@@ -149,5 +154,28 @@ public class RbBossJumpAttack : RbBossAttack
                 _controller.AgentAnimator.StopAnimator(false);
             }
         }
+
+        yield return new WaitUntil(() => _controller.NavMovement.IsGround);
+        yield return new WaitForSeconds(0.3f);
+        Collider[] playerCheck = Physics.OverlapSphere(_controller.transform.position, radius);
+
+        foreach(var a in playerCheck)
+        {
+            if (a.CompareTag("Player"))
+            {
+                a.gameObject.GetComponent<IDamageable>()
+                .OnDamage(Damage, transform.position, GameManager.Instance.PlayerOriginTrm.position - transform.position);
+            }
+        }
+        
+    }
+    private void OnDrawGizmos()
+    {
+
+        Color old = Gizmos.color;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.color = old;
+
     }
 }

@@ -42,6 +42,10 @@ public class BossController : PoolableMono
 
     private List<AITransition> _anyTransitions = new List<AITransition>();
     public List<AITransition> AnyTransitions => _anyTransitions;
+    
+    [field: SerializeField]
+    public bool IsDone { get; set; } = false;
+
 
     protected virtual void Awake()
     {
@@ -66,6 +70,7 @@ public class BossController : PoolableMono
         }
 
         _initState = _currentState;
+        IsDone = false;
     }
 
     protected virtual void Start()
@@ -87,24 +92,22 @@ public class BossController : PoolableMono
 
     void Update()
     {
-        if (_enemyHealth.IsDead) return;
+        if (_enemyHealth.IsDead && IsDone) return;
         _currentState?.OnUpdateState();
     }
 
     public UnityEvent OnAfterDead = null;
-
     public void SetDead()
     {
         _navMovement.StopNavigation();
         _agentAnimator.StopAnimator(true);
-        _navMovement.KnockBack(() =>
+
+        UtilMono.Instance.AddDelayCoroutine(() =>
         {
             _agentAnimator.StopAnimator(false);
             _agentAnimator.SetDead();
-            UtilMono.Instance.AddDelayCoroutine(() => {
-                OnAfterDead?.Invoke();
-            }, 1f);
-        });
+            OnAfterDead?.Invoke();
+        },1f);
     }
         
     public void ShowDeadUI()
@@ -118,6 +121,7 @@ public class BossController : PoolableMono
         _navMovement.ResetNavAgent();
         ChangeState(_initState);
         _actionData.Init(); //액션데이터도 초기화
+        IsDone = false;
     }
 
     public void GotoPool()

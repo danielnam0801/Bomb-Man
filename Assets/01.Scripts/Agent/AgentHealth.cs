@@ -14,6 +14,11 @@ public class AgentHealth : MonoBehaviour, IDamageable
     private int _currentHealth;
 
     private AgentController _agentController;
+    
+    public int MaxHP => _healthAndArmor.MaxHP;
+
+    bool canDamaged = true;
+
     private void Awake()
     {
         _agentController = GetComponent<AgentController>();
@@ -37,7 +42,9 @@ public class AgentHealth : MonoBehaviour, IDamageable
     public void OnDamage(int damage, Vector3 point, Vector3 normal)
     {
         if (_agentController.IsDead) return; //사망시 중지
-
+        if (!canDamaged) return;
+        canDamaged = false;
+        UtilMono.Instance.AddDelayCoroutine(() => canDamaged = true, 0.2f);
         int calcDamage = Mathf.CeilToInt(damage * (1 - _healthAndArmor.ArmorValue));
         AddHealth(-calcDamage);
 
@@ -50,6 +57,9 @@ public class AgentHealth : MonoBehaviour, IDamageable
             //_agentController.ChangeState(Core.StateType.OnHit); //이것도 주석 해제해줄거야
         }
 
+        Debug.Log("PlayerHITT");
         OnHitTrigger?.Invoke(calcDamage, point, normal);
+        OnHealthChanged?.Invoke(_currentHealth, MaxHP);
+        Debug.Log(OnHealthChanged.Method.Name);
     }
 }

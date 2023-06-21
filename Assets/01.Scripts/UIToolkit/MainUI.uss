@@ -3,16 +3,17 @@
     padding-right: 15px;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 30px;
+    font-size: 20px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    background-color: rgb(0, 19, 192);
+    background-color: rgb(0, 34, 115);
     color: rgb(255, 255, 255);
     transition-property: all;
     transition-duration: 0.5s;
-    -unity-font-definition: url('project://database/Assets/09.Fonts/neodgmSDFToolkit.asset?fileID=11400000&guid=8b2d4e644b6a67943ba76afcf74705e8&type=2#neodgmSDFToolkit');
+    -unity-font-definition: url('project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&guid=b67cde2e1748c9444bddfa70b9a92bb0&type=2#LUCKIESTGUY_0 SDF');
+    -unity-font: url('project://database/Assets/09_Fonts/Flashback.ttf?fileID=12800000&guid=22b8915bd5371c44682d3f427b774db9&type=3#Flashback');
 }
 
 .btn:hover {
@@ -39,17 +40,19 @@
 
 #popup {
     width: 600px;
-    height: 400px;
-    background-color: rgb(255, 255, 255);
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
     margin-top: -1600px;
     transition-property: margin-top;
     transition-duration: 0.5s;
     transition-timing-function: ease-out-bounce;
     transition-delay: 0.3s;
+    align-items: center;
+    justify-content: center;
 }
 
 #popupWindow.on > #popup {
@@ -61,9 +64,9 @@
 }
 
 .rect {
-    width: 650px;
+    width: 800px;
     height: 80px;
-    background-color: rgb(21, 92, 96);
+    background-color: rgb(12, 55, 58);
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -97,7 +100,7 @@
 }
 
 .Button:hover {
-    background-color: rgba(0, 0, 0, 255);
+    background-color: rgb(0, 0, 0);
     transition-duration: 1s;
 }
 
@@ -112,5 +115,31 @@
 
 .DeadUI.on {
     opacity: 1;
+    transition-duration: 1s;
+}
+
+.updownPanel {
+    width: 100%;
+    height: 12%;
+    background-color: rgb(0, 0, 0);
+}
+
+.updownPanel.top {
+    bottom: 300px;
+}
+
+.updownPanel.bottom {
+    top: 300px;
+}
+
+.updownPanel.top.on {
+    bottom: 0;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+}
+
+.updownPanel.bottom.on {
+    top: 0;
+    transition-timing-function: ease-out;
     transition-duration: 1s;
 }

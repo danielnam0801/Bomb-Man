@@ -17,4 +17,4 @@ MonoBehaviour:
   BaseCriticialDamage: 15
   MoveSpeed: 150
   JumpPower: 5
-  CanApplyBombRadius: 5
+  CanApplyBombRadius: 4

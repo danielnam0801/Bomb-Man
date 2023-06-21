@@ -9,6 +9,7 @@ public class NavAgentMovement : MonoBehaviour
     private NavMeshAgent _navAgent;
     public NavMeshAgent NavAgent => _navAgent;
 
+    [SerializeField] Transform groundCheckPos;
     [SerializeField]
     private float _knockBackSpeed = 4f, _gravity = -9.8f, _knockBackTime = 0.4f;
     private float _verticalVelocity;
@@ -72,7 +73,10 @@ public class NavAgentMovement : MonoBehaviour
     public void StopNavigation()
     {
         _navAgent.isStopped = true;
+        _navAgent.enabled = false;
+        _characterController.enabled = false;
     }
+
 
     public void KnockBack(Action EndCallback = null)
     {
@@ -103,11 +107,15 @@ public class NavAgentMovement : MonoBehaviour
         _navAgent.isStopped = false;
     }
 
+    public bool IsGround;
     private void FixedUpdate()
     {
+        Debug.Log("IsGround : " + IsGround);
+
+        IsGround = Physics.OverlapSphere(groundCheckPos.position, 0.3f, GameManager.Instance.whatIsGround).Length != 0;
+
         if (_isControllerMode == false) return;
 
-        Debug.Log(_characterController.isGrounded);
         if(_characterController.isGrounded == false)
         {
             _verticalVelocity = _gravity * Time.fixedDeltaTime;
@@ -116,17 +124,17 @@ public class NavAgentMovement : MonoBehaviour
             _verticalVelocity = _gravity * 0.3f * Time.fixedDeltaTime;
         }
 
-        if(CalculateKnockBack()) //아직 넉백중이다.
-        {
-            Vector3 move = _movementVelocity + _verticalVelocity * Vector3.up;
-            _characterController.Move(move);
-        }else  //넉백이 끝났다.
-        {
-            _isControllerMode = false;
-            //_characterController.enabled = false;
-            EndKnockBackAction?.Invoke();
+        //if(CalculateKnockBack()) //아직 넉백중이다.
+        //{
+        //    Vector3 move = _movementVelocity + _verticalVelocity * Vector3.up;
+        //    _characterController.Move(move);
+        //}else  //넉백이 끝났다.
+        //{
+        //    _isControllerMode = false;
+        //    //_characterController.enabled = false;
+        //    EndKnockBackAction?.Invoke();
 
-            //여기서 원래 네비메시도 켜줘야 한다.
-        }
+        //    //여기서 원래 네비메시도 켜줘야 한다.
+        //}
     }
 }
