@@ -92,7 +92,7 @@ public class BossController : PoolableMono
 
     void Update()
     {
-        if (_enemyHealth.IsDead && IsDone) return;
+        if (_enemyHealth.IsDead || IsDone) return;
         _currentState?.OnUpdateState();
     }
 

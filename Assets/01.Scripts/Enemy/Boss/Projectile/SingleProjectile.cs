@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.VFX;
 using System;
+using UnityEngine.Events;
 
 public class SingleProjectile : Projectile
 {
@@ -14,6 +15,9 @@ public class SingleProjectile : Projectile
 
     private RBBossSingleAttack _bossShootAttack;
     ChargeShakeFeedback _chargeShakeFeedback;
+
+    public UnityEvent chargeSound;
+    public UnityEvent shootSound;
 
     [SerializeField]
     private float _beamLength = 10f;
@@ -57,8 +61,9 @@ public class SingleProjectile : Projectile
 
     public void Charge(float time)
     {
+        chargeSound?.Invoke();
         PreCharging();
-        Sequence seq = DOTween.Sequence();
+         Sequence seq = DOTween.Sequence();
         Tween scaleUp = _beamMuzzle.transform.DOScale(Vector3.one, time).SetEase(Ease.InQuint);
         seq.Append(scaleUp);
         Vector3 shakeValue = Vector3.zero;
@@ -70,6 +75,7 @@ public class SingleProjectile : Projectile
         shootAct += () => DOVirtual.Vector3(new Vector3(4,4,0), Vector3.zero, time - 0.5f,
             onVirtualUpdate: t => _chargeShakeFeedback.SetShake(t.x, t.y))
         .OnComplete(()=>_chargeShakeFeedback.ResetShake()).SetEase(Ease.InQuad);
+        shootAct += () => shootSound?.Invoke();
 
         seq.onComplete = () => UtilMono.Instance.AddDelayCoroutine(() =>
             shootAct.Invoke(),

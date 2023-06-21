@@ -19,6 +19,7 @@ public class AgentInput : MonoBehaviour
 
     void Update()
     {
+        if (PlayerManager.Instance.AgentController.IsDead) return;
         UpdateMoveInput();
         UpdateCameraInput();
     }

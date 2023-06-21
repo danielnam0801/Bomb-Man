@@ -47,6 +47,7 @@ public class Dynamite : PoolableMono
 
     private void Explode()
     {
+
         if (!isEnemyBomb)
         {
             float radius = PlayerManager.Instance.

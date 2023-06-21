@@ -12,11 +12,13 @@ public class EffectPlayer : PoolableMono
     protected List<VisualEffect> _effects;
 
     Rigidbody2D rb;
-
+    AudioSource audioSource;
+    
     private void Awake()
     {
         GetComponentsInChildren<ParticleSystem>(_particles);
         GetComponentsInChildren<VisualEffect>(_effects);
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
@@ -26,6 +28,7 @@ public class EffectPlayer : PoolableMono
 
     public void StartPlay(float endTime)
     {
+        audioSource.PlayOneShot(audioSource.clip);
         if (_particles != null)
         {
             _particles.ForEach(p => p.Play());
