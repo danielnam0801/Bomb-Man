@@ -150,13 +150,13 @@ public class IntroUI : MonoBehaviour
                 VisualElement upPanel = root.Q<VisualElement>("UpPanel");
                 VisualElement downPanel = root.Q<VisualElement>("DownPanel");
                 panelEnd = true;
-                upPanel.AddToClassList("PanelEnd");
-                downPanel.AddToClassList("PanelEnd2");
+                upPanel.AddToClassList("up");
+                downPanel.AddToClassList("down");
                 isStart = true;
             }
         });
         yield return new WaitUntil(()=> panelEnd);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         UIManager.Instance.UseIntroUI = false;
         VisualElementInit();
     }

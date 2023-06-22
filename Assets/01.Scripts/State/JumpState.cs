@@ -43,7 +43,7 @@ public class JumpState : CommonState
         shootDir /= distance;
 
         shootDir = new Vector3(Mathf.Clamp(shootDir.x, -1f, 1f), 
-            Mathf.Clamp(shootDir.y, -1f, 1f), Mathf.Clamp(shootDir.z, -1f, 1f));
+            Mathf.Clamp(shootDir.y, -1f, 1f), Mathf.Clamp(shootDir.z, -1, 1));
 
         Debug.Log($"Dir '{shootDir.x} : {shootDir.y} : {shootDir.z}'");
         //_agentMovement.SetRotation(dir + _agentController.transform.position);

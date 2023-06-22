@@ -105,6 +105,7 @@ public class NavAgentMovement : MonoBehaviour
         _characterController.enabled = true;
         _navAgent.enabled = true;
         _navAgent.isStopped = false;
+        StopImmediately();
     }
 
     public bool IsGround;

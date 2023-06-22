@@ -44,7 +44,7 @@ public class NormalState : CommonState
         dynamite.isEnemyBomb = false;
         dynamite.Damage = _agentController.CharacterData.BaseDamage;
         dynamite.Shoot(_actionData.StartPos, _actionData.cp1, _actionData.cp2, _actionData.EndPos, _actionData.PointCnt);
-        dynamite.BombDelay = 1f;
+        dynamite.BombDelay = 0.8f;
     }
 
 

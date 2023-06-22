@@ -9,7 +9,7 @@
                         <ui:VisualElement name="Bar" style="background-color: rgb(156, 16, 11); width: 100%; height: 100%; border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; transform-origin: left; scale: 1 1;" />
                         <ui:VisualElement name="TextContainer" style="position: absolute; bottom: 0; width: 100%; left: 10px; flex-direction: row; justify-content: space-between; padding-left: 10px; padding-right: 10px; padding-bottom: 5px;">
                             <ui:Label display-tooltip-when-elided="true" name="NameLabel" class="font" />
-                            <ui:Label text="100 / 100" display-tooltip-when-elided="true" name="HPLabel" class="font" style="top: 0; -unity-font-definition: initial; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=05d59ea048ea88d4696a9d91df96e3f7&amp;type=3#NotInter-Regular&apos;); font-size: 25px;" />
+                            <ui:Label text="50/50" display-tooltip-when-elided="true" name="HPLabel" class="font" style="top: 0; -unity-font-definition: initial; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=05d59ea048ea88d4696a9d91df96e3f7&amp;type=3#NotInter-Regular&apos;); font-size: 25px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -21,13 +21,13 @@
     </ui:VisualElement>
     <ui:VisualElement name="popupWindow">
         <ui:VisualElement name="popup">
-            <ui:Label text="Puase" display-tooltip-when-elided="true" style="-unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/09_Fonts/Flashback.ttf?fileID=12800000&amp;guid=22b8915bd5371c44682d3f427b774db9&amp;type=3#Flashback&apos;); font-size: 100px; color: rgb(0, 203, 255); top: 0; -unity-text-outline-color: rgb(255, 255, 255); -unity-text-outline-width: 0;" />
+            <ui:Label text="Pause" display-tooltip-when-elided="true" style="-unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/09_Fonts/Flashback.ttf?fileID=12800000&amp;guid=22b8915bd5371c44682d3f427b774db9&amp;type=3#Flashback&apos;); font-size: 100px; color: rgb(0, 203, 255); top: 0; -unity-text-outline-color: rgb(255, 255, 255); -unity-text-outline-width: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="HpBarContainer" style="position: absolute; left: 50%; top: 20px; translate: -50% 0; -unity-font: resource(&apos;FlatSkin/Font/Roboto-Black&apos;);">
+    <ui:VisualElement name="HpBarContainer" style="position: absolute; left: 50%; top: 20px; translate: -50% 0;">
         <ui:VisualElement name="BarRect" class="rect">
             <ui:VisualElement name="Bar" style="background-color: rgb(55, 136, 144); width: 100%; height: 100%; border-top-left-radius: 7px; border-bottom-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; transform-origin: left;" />
-            <ui:VisualElement name="TextContainer" style="position: absolute; bottom: 10px; width: 100%; left: 10px; flex-direction: row; justify-content: space-between; padding-left: 10px; padding-right: 10px; padding-bottom: 5px;">
+            <ui:VisualElement name="TextContainer" style="position: absolute; bottom: 10px; width: 100%; left: 10px; flex-direction: row; justify-content: space-between; padding-left: 10px; padding-right: 10px; padding-bottom: 5px; -unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0.TTF?fileID=12800000&amp;guid=f82abf22d6bea754d9d1d86b8a06723e&amp;type=3#LUCKIESTGUY_0&apos;);">
                 <ui:Label text="EnemyName" display-tooltip-when-elided="true" name="NameLabel" class="font" />
                 <ui:Label text="100 / 100" display-tooltip-when-elided="true" name="HPLabel" class="font" />
             </ui:VisualElement>
@@ -36,10 +36,10 @@
     <ui:VisualElement name="DeadUI" picking-mode="Ignore" class="DeadUI" style="justify-content: space-between;">
         <ui:VisualElement name="DeadTopPanel" class="updownPanel top" />
         <ui:VisualElement style="width: 100%; height: 50%; background-color: rgba(0, 0, 0, 0.39); align-items: center; justify-content: center;">
-            <ui:Label text="Die" display-tooltip-when-elided="true" style="font-size: 150px; color: rgb(154, 0, 0); top: 20px;" />
+            <ui:Label text="Die" display-tooltip-when-elided="true" style="font-size: 150px; color: rgb(154, 0, 0); top: 20px; -unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0.TTF?fileID=12800000&amp;guid=f82abf22d6bea754d9d1d86b8a06723e&amp;type=3#LUCKIESTGUY_0&apos;);" />
             <ui:VisualElement style="width: 40%; height: 20%; top: 100px; align-items: center; justify-content: space-around; flex-direction: row;">
-                <ui:Button text="Intro" display-tooltip-when-elided="true" name="IntroBtn" class="Button" />
-                <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitBtn" class="Button" />
+                <ui:Button text="Intro" display-tooltip-when-elided="true" name="IntroBtn" class="Button" style="-unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0.TTF?fileID=12800000&amp;guid=f82abf22d6bea754d9d1d86b8a06723e&amp;type=3#LUCKIESTGUY_0&apos;);" />
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitBtn" class="Button" style="-unity-font-definition: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0%20SDF.asset?fileID=11400000&amp;guid=b67cde2e1748c9444bddfa70b9a92bb0&amp;type=2#LUCKIESTGUY_0 SDF&apos;); -unity-font: url(&apos;project://database/Assets/EffectCore/WebDemos/font/LUCKIESTGUY_0.TTF?fileID=12800000&amp;guid=f82abf22d6bea754d9d1d86b8a06723e&amp;type=3#LUCKIESTGUY_0&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="DeadBottomPanel" class="updownPanel bottom" style="bottom: 0;" />

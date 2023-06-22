@@ -11,7 +11,7 @@ public class RbBossJumpAttack : RbBossAttack
     public UnityEvent JumpEndEvent;
     [SerializeField] EffectPlayer landEffect;
     [SerializeField] Transform alertCircle;
-    float radius = 3.25f;
+    float radius = 3.35f;
 
     bool isJumpStart;
     bool isAir;
@@ -168,14 +168,5 @@ public class RbBossJumpAttack : RbBossAttack
             }
         }
         
-    }
-    private void OnDrawGizmos()
-    {
-
-        Color old = Gizmos.color;
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, radius);
-        Gizmos.color = old;
-
     }
 }

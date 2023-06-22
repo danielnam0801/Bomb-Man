@@ -168,10 +168,4 @@ public class Dynamite : PoolableMono
     {
         //BombAct?.Invoke();
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position, bossBombRad);
-        Gizmos.DrawSphere(transform.position, bossHitCriRad);
-    }
 }

@@ -23,17 +23,4 @@ public class InnerDistanceDecision : AIDecision
         }
         return _aIActionData.TargetSpotted;
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        if(UnityEditor.Selection.activeObject == gameObject)
-        {
-            Color old = Gizmos.color;
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, _distance);
-            Gizmos.color = old;
-        }
-    }
-#endif
 }

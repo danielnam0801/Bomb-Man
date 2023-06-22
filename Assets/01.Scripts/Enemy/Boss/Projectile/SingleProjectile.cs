@@ -130,7 +130,7 @@ public class SingleProjectile : Projectile
         _beamMuzzle.Stop();
         yield return new WaitForSeconds(0.3f);
         _bossShootAttack.endAttack = true;
-        PoolManager.Instance.Push(this);
+        Destroy(this);
     }
     public override void Init()
     {

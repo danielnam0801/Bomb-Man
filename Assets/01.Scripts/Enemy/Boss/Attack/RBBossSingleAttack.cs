@@ -144,8 +144,7 @@ public class RBBossSingleAttack : RbBossAttack
     private void SingleShoot()
     {
         UtilMono.Instance.AddDelayCoroutine( () => ChargeEvent?.Invoke() , 0.5f);
-        SingleProjectile projectile = PoolManager.Instance.Pop(singleProjectile.gameObject.name) as SingleProjectile;
-        projectile.transform.SetParent(ShootPoint);
+        SingleProjectile projectile = Instantiate(singleProjectile, ShootPoint);
         projectile.transform.localPosition = Vector3.zero;
         projectile.AttackSet(this);
         projectile.Charge(singleDelay);

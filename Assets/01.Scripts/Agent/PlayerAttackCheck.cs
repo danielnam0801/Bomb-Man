@@ -134,4 +134,10 @@ public class PlayerAttackCheck : MonoBehaviour
         yield return new WaitForSeconds(attackInputDelay);
         _agentInput.CanCheckAttackInput = true;
     }
+
+    private void OnDisable()
+    {
+        _lineRenderer.enabled = false;
+        if (_targetPointCircle.gameObject.activeSelf) _targetPointCircle.gameObject.SetActive(false);
+    }
 }
