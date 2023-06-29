@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
         CreateBombManager();
         CreateUIManagers();
         CreateVFXManager();
+        //CreatePlayerManager();
 
         DontDestroyOnLoad(this);
     }
